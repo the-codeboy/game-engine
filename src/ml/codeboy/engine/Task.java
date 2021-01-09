@@ -6,6 +6,7 @@ public abstract class Task{
     protected double period=1;
     double timeSinceLast=0;
     boolean runOnce=false;
+    boolean useRealTime=false;
 
     boolean isCanceled=false,
     started=false;
@@ -26,7 +27,7 @@ public abstract class Task{
     }
 
     void tick(){
-        timeSinceLast+=Game.deltaTime(true);
+        timeSinceLast+=Game.deltaTime(useRealTime);
         while(!isCanceled&&timeSinceLast>period){
             timeSinceLast-=period;
             run();

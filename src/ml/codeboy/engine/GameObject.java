@@ -12,16 +12,15 @@ public class GameObject extends Sprite{
     private static final ArrayList<GameObject>gameObjects=new ArrayList<>();
 
     protected Game game;
-    private boolean isDestroyed=false;
 
 
     public GameObject(Game game) {
-        super(game,SpriteType.Circle);
+        super(SpriteType.Circle);
         init(game);
     }
 
     public GameObject(Game game,SpriteType type) {
-        super(game,type);
+        super(type);
         init(game);
     }
 
@@ -88,23 +87,10 @@ public class GameObject extends Sprite{
         return game;
     }
 
-    public void destroy(GameObject object){
-        if(object.isDestroyed)
-            return;
-        object.isDestroyed=true;
-        object.onDestruction();
-        Game.get().getScheduler().scheduleTask(()->{
-            getSpritesAt(object.getLayer()).remove(object);
-            gameObjects.remove(object);
-            },0);
-    }
-
-    public void destroy(){
-        destroy(this);
-    }
-
-    protected void onDestruction(){
-
+    @Override
+    protected void delete() {
+        super.delete();
+        gameObjects.remove(this);
     }
 
     public Point getPosition(){
@@ -146,7 +132,12 @@ public class GameObject extends Sprite{
     }
 
     public Point getMousePosition(){
-        return Input.getMousePosition();
+        Point position = Input.getMousePosition();
+        if(position==null){
+            System.out.println("position is null");
+            position=new Point();
+        }
+        return position;
     }
 
     public int getMouseX(){
@@ -202,8 +193,10 @@ public class GameObject extends Sprite{
                 || getY() > other.getY()+other.getHeight()) {
             return false;
         }
-        else return getX() + getWidth() >= other.getX()
-                && getX() <= other.getX() + other.getWidth();
+        else if(getX() + getWidth() >= other.getX()
+                && getX() <= other.getX() + other.getWidth())
+            return true;
+            return false;
     }
 
     protected void onCollision(GameObject other){

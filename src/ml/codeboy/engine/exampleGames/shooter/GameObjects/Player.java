@@ -3,11 +3,12 @@ package ml.codeboy.engine.exampleGames.shooter.GameObjects;
 import ml.codeboy.engine.Game;
 import ml.codeboy.engine.GameObject;
 import ml.codeboy.engine.UI.Button;
+import ml.codeboy.engine.events.DestroyEvent;
 
 import java.awt.*;
 
 public class Player extends Damageable {
-    int xDir=0,yDir=0;
+    double xDir=0,yDir=0;
 
     public int getCoins() {
         return coins;
@@ -15,6 +16,10 @@ public class Player extends Damageable {
 
     public void setCoins(int coins) {
         this.coins = coins;
+    }
+
+    public void addCoins(int coins) {
+        this.coins += coins;
     }
 
     private int coins=10;
@@ -49,13 +54,13 @@ public class Player extends Damageable {
     public void onDeath(){
             destroy();
             game.setGameOver(true);
-            Button button=new Button(game,"restart",game::restart);
+            Button button=new Button("restart",game::restart);
             button.setPosition(game.getMiddleOfWindow());
             button.setWidthAndHeight(game.getMiddleOfWindow().x/4,game.getMiddleOfWindow().y/4);
     }
 
     @Override
-    protected void onDestruction() {
+    protected void onDestruction(DestroyEvent event) {
         player=null;
     }
 
@@ -103,20 +108,35 @@ public class Player extends Damageable {
     }
 
     private int bulletSize=4;
+
+    public void addBullets(int bullets) {
+        this.bullets += bullets;
+    }
+
+    private int bullets=1;
+
+    private void shoot(){
+        double angle=2*Math.PI/bullets;
+        for (int i = 0; i < bullets; i++) {
+            double x=xDir*Math.cos(i*angle)-yDir*Math.sin(i*angle),y=(xDir*Math.sin(i*angle)+yDir*Math.cos(i*angle));
+            Bullet bullet=new Bullet(game, x, y);
+            bullet.setSize(bulletSize);
+            bullet.setPosition((int) (getX() + x), (int)(getY() + y));
+            bullet.setLives(piercing);
+            bullet.speed=bulletSpeed;
+        }
+        ammo--;
+    }
+
     @Override
     protected void tick() {
         double vectorlength=getMousePosition().distance(getPosition());
-        xDir= (int) (length*(getMouseX()-getX())/ vectorlength);
-        yDir= (int) (length*(getMouseY()-getY())/ vectorlength);
+        xDir= (length*(getMouseX()-getX())/ vectorlength);
+        yDir= (length*(getMouseY()-getY())/ vectorlength);
         if(isMouseDown()){
             if(ammo>=1&&cooldown<=0) {
                 cooldown=maxCooldown;
-                Bullet bullet=new Bullet(game, xDir, yDir);
-                bullet.setSize(bulletSize);
-                bullet.setPosition(getX() + xDir, getY() + yDir);
-                bullet.setLives(piercing);
-                bullet.speed=bulletSpeed;
-                ammo--;
+                shoot();
             }
         }
         if(ammo<maxAmmo) ammo+=reloadSpeed*deltaTime;
@@ -128,6 +148,6 @@ public class Player extends Damageable {
     @Override
     public void render(Graphics2D g) {
         g.drawOval(getX()-getWidth()/2,getY()-getHeight()/2,getWidth(),getHeight());
-        g.drawLine(getX(),getY(),getX()+xDir,getY()+yDir);
+        g.drawLine(getX(),getY(),(int)(getX()+xDir),(int)(getY()+yDir));
     }
 }

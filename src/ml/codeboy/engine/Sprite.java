@@ -1,5 +1,7 @@
 package ml.codeboy.engine;
 
+import ml.codeboy.engine.events.DestroyEvent;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -7,10 +9,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Sprite {
+
+    protected void setImage(BufferedImage image) {
+        this.image = image;
+    }
+
     private BufferedImage image;
     private final String name;
     private double x,y;
     private SpriteType type=SpriteType.Image;
+    protected Game game;
+    private boolean isDestroyed=false;
+
+    private boolean interactable=true;
+
+    public boolean isInteractable() {
+        return interactable;
+    }
+
+    public void setInteractable(boolean interactable) {
+        this.interactable = interactable;
+    }
 
     public Color getColor() {
         return color;
@@ -25,6 +44,30 @@ public class Sprite {
     public enum SpriteType {
         Image,Circle,Rectangle,Custom;
     }
+
+    public void destroy(){
+        destroy(this);
+    }
+
+    public void destroy(Sprite sprite){
+        if(sprite.isDestroyed)
+            return;
+        sprite.isDestroyed=true;
+        DestroyEvent event=new DestroyEvent(this);
+        sprite.onDestruction(event);
+        if(!event.isCanceled())
+            sprite.deleteNextTick();
+    }
+
+    protected void deleteNextTick(){
+        Game.doNext(this::delete);
+    }
+
+    protected void delete(){
+        getLayer().getSprites().remove(this);
+    }
+
+    protected void onDestruction(DestroyEvent event){}
 
     public int getWidth() {
         return width;
@@ -42,9 +85,10 @@ public class Sprite {
         this.height = height;
     }
 
-    public void setWidthAndHeight(int width,int height) {
+    public Sprite setWidthAndHeight(int width,int height) {
         this.height = height;
         this.width = width;
+        return this;
     }
 
     public void setSize(int size) {
@@ -64,7 +108,7 @@ public class Sprite {
 
     private Layer layer=Layer.DEFAULT;
 
-    private static HashMap<Layer,ArrayList<Sprite>>sprites=new HashMap<>();
+    private static final HashMap<Layer,ArrayList<Sprite>>sprites=new HashMap<>();
     static {
         sprites.put(Layer.UI,new ArrayList<>());
         sprites.put(Layer.TOP,new ArrayList<>());
@@ -78,9 +122,9 @@ public class Sprite {
         return sprites.getOrDefault(layer,new ArrayList<>());
     }
 
-    public Sprite(Game game,SpriteType type) {
+    public Sprite(SpriteType type) {
         this.type=type;
-        name=game.getName();
+        name="custom";
         init();
     }
 
@@ -101,13 +145,14 @@ public class Sprite {
     }
 
     public Sprite(String name,String path,double x,double y,int width,int height) {
-        type=SpriteType.Image;
         this.name = name;
         image=Sprites.getSprite(path);
         this.x=x;
         this.y=y;
         this.width=width;
         this.height=height;
+        if(image!=null&&width==-1&&width==height)
+            setWidthAndHeight(image.getWidth(), image.getHeight());
         init();
     }
 
@@ -163,7 +208,8 @@ public class Sprite {
     }
 
     public boolean isTouching(Point point){
-        return getXDouble()-getWidth()/(float)2<= point.getX()&&getYDouble()-getHeight()/(float)2<= point.getY()&&
+        return interactable&&
+                getXDouble()-getWidth()/(float)2<= point.getX()&&getYDouble()-getHeight()/(float)2<= point.getY()&&
                 getXDouble()+getWidth()/(float)2>= point.getX()&&getYDouble()+getHeight()/(float)2>= point.getY();
     }
 

@@ -1,5 +1,7 @@
 package ml.codeboy.engine;
 
+import com.sun.istack.internal.Nullable;
+
 import java.util.ArrayList;
 
 public enum Layer {
@@ -13,8 +15,14 @@ public enum Layer {
         return ordinal()!=0;
     }
 
+    public void clear(){
+        getSprites().forEach(Sprite::destroy);
+        getSprites().clear();
+    }
+
+    @Nullable
     public Layer getNext(){
-        return values()[ordinal()-1];
+        return hasNext()?values()[ordinal()-1]:null;
     }
 
 }

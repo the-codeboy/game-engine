@@ -1,10 +1,12 @@
 package ml.codeboy.engine;
 
+import ml.codeboy.engine.UI.Button;
 import ml.codeboy.engine.UI.UIObject;
 import ml.codeboy.engine.exampleGames.shooter.Shooter;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.HashMap;
 
 public class Input implements MouseListener, KeyListener, MouseWheelListener, MouseMotionListener {
 
@@ -14,16 +16,26 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
         return input!=null?input:(input=new Input());
     }
 
+    private final HashMap<Integer,Boolean> keys=new HashMap<>();
+
     public static Point getMousePosition(){
-        return MouseInfo.getPointerInfo().getLocation();
+        //return MouseInfo.getPointerInfo().getLocation();
+        Point position = null;
+        if(Game.get()!=null)
+        position= Game.get().getFrame().getMousePosition();
+        return position==null?new Point():position;
+    }
+
+    public static boolean isKeyDown(int keyCode){
+        return getInstance().keys.getOrDefault(keyCode,false);
     }
 
     public static int getMouseX(){
-        return MouseInfo.getPointerInfo().getLocation().x;
+        return getMousePosition().x;
     }
 
     public static int getMouseY(){
-        return MouseInfo.getPointerInfo().getLocation().y;
+        return getMousePosition().y;
     }
 
     public static boolean isMouseDown() {
@@ -34,14 +46,16 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        for (Sprite sprite:Layer.UI.getSprites()){
-            if(sprite instanceof UIObject){
-                if(sprite.isTouching(getMousePosition())){
-                    Game.get().getScheduler().scheduleTask(((UIObject) sprite)::press,0);
-                    return;
+        Game.doNext(()->{
+            for (Sprite sprite:Layer.UI.getSprites()){
+                if(sprite instanceof Button){
+                    if(sprite.isTouching(getMousePosition())){
+                        ((Button) sprite).press();
+                        return;
+                    }
                 }
             }
-        }
+        });
     }
 
     public static boolean isTouchingUI(){
@@ -89,14 +103,16 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode()==KeyEvent.VK_L&&isMouseDown()&&isTouchingUI()){
             if(Shooter.get()!=null)
-                Shooter.get().getPlayer().setCoins(1000);
+                Shooter.get().getPlayer().addCoins(1000);
         }
+        keys.put(e.getKeyCode(),true);
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         if(e.getKeyCode()==KeyEvent.VK_SPACE)
             Game.get().doNextTick(Game.get()::togglePause);
+        keys.put(e.getKeyCode(),false);
     }
 
     @Override

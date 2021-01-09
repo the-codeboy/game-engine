@@ -2,14 +2,15 @@ package ml.codeboy.engine.exampleGames.shooter.GameObjects;
 
 import ml.codeboy.engine.Game;
 import ml.codeboy.engine.GameObject;
+import ml.codeboy.engine.events.DestroyEvent;
 
 import java.awt.*;
 
 public class Bullet extends Damageable {
-    int dirX,dirY;
+    double dirX,dirY;
     double speed=20;
     public static int count=0;
-    public Bullet(Game game,int dirX,int dirY) {
+    public Bullet(Game game,double dirX,double dirY) {
         super(game);
         game.getScheduler().scheduleTask(this::destroy,3);
         setSize(5);
@@ -20,7 +21,7 @@ public class Bullet extends Damageable {
     }
 
     @Override
-    protected void onDestruction() {
+    protected void onDestruction(DestroyEvent event) {
         count--;
     }
 
@@ -34,7 +35,6 @@ public class Bullet extends Damageable {
 
     @Override
     protected void tick() {
-
         addX(dirX*(deltaTime*speed));
         addY(dirY*(deltaTime*speed));
     }

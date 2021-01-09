@@ -1,11 +1,13 @@
 package ml.codeboy.engine.UI;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class UITheme {
 
     public static UITheme DEFAULT =new UITheme(Color.DARK_GRAY,Color.LIGHT_GRAY,Color.BLACK,false,5,true),
-            CRAZY=new UITheme(Color.YELLOW,Color.ORANGE,true);
+            CRAZY=new UITheme(Color.YELLOW,Color.ORANGE,true),
+    PLAIN_TEXT=new UITheme(new Color(0,0,0,0),Color.GRAY,false);
 
     private final Color background,foreground,textColor;
     private final int borderSize;
@@ -48,5 +50,15 @@ public class UITheme {
 
     public boolean hasBorder() {
         return hasBorder;
+    }
+
+    private ArrayList<UIObject>objects=new ArrayList<>();
+
+    public void add(UIObject object){
+        objects.add(object);
+    }
+
+    public void remove(UIObject object){
+        objects.remove(object);
     }
 }

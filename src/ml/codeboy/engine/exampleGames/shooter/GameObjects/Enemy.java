@@ -1,6 +1,7 @@
 package ml.codeboy.engine.exampleGames.shooter.GameObjects;
 
 import ml.codeboy.engine.Game;
+import ml.codeboy.engine.events.DestroyEvent;
 import ml.codeboy.engine.exampleGames.shooter.Shooter;
 
 public class Enemy extends Damageable{
@@ -18,7 +19,7 @@ public class Enemy extends Damageable{
     }
 
     @Override
-    protected void onDestruction() {
+    protected void onDestruction(DestroyEvent event) {
         count--;
         killed++;
         ((Shooter)game).getPlayer().setCoins(((Shooter)game).getPlayer().getCoins()+1);

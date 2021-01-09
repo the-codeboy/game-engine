@@ -2,7 +2,6 @@ package ml.codeboy.engine.exampleGames.shooter.upgrades;
 
 import ml.codeboy.engine.Game;
 import ml.codeboy.engine.UI.Button;
-import ml.codeboy.engine.UI.UIObject;
 import ml.codeboy.engine.exampleGames.shooter.GameObjects.Player;
 
 public abstract class Upgrade {
@@ -22,27 +21,57 @@ public abstract class Upgrade {
     Button button;
     String name;
 
-    protected Upgrade(int cost,String name, Game game) {
+    public enum BuyAtOnce{
+        One(1),Two(2),Five(5),Ten(10),Fifty(50),Infinite(Integer.MAX_VALUE);
+
+        public final int value;
+
+        BuyAtOnce(int value) {
+            this.value = value;
+        }
+
+        public BuyAtOnce getNext(){
+            return ordinal()== values().length-1?values()[0]:values()[ordinal()+1];
+        }
+    }
+
+    private static BuyAtOnce buyAtOnce=BuyAtOnce.One;
+
+    public static BuyAtOnce getBuyAtOnce(){
+        return buyAtOnce;
+    }
+
+    public static void cycleBuyAtOnce(){
+        buyAtOnce=buyAtOnce.getNext();
+    }
+
+    public Upgrade(int cost,String name, Game game) {
         this.cost = cost;
         upgrades++;
         this.name=name;
-        button=new Button(game,name+" cost: "+cost+" current level "+level,this::tryBuy);
+        button=new Button(name+" cost: "+cost+" current level "+level,this::tryBuy);
         button.setPosition(game.getFrame().getWidth()-150,game.getFrame().getHeight()-70*upgrades);
         button.setWidthAndHeight(200,50);
     }
 
     private void tryBuy(){
-        if(Player.getPlayer()!=null)
-        buy(Player.getPlayer());
+        for (int i = 0; i < buyAtOnce.value; i++) {
+            if(Player.getPlayer()!=null)
+                if(!buy(Player.getPlayer()))
+                    return;
+
+        }
     }
 
-    public void buy(Player player){
+    public boolean buy(Player player){
         if(player.getCoins()>=cost){
             player.setCoins(player.getCoins()-cost);
             level++;
             button.setText(name+" cost: "+cost+" current level "+level);
             onBuy();
+            return true;
         }
+        return false;
     }
 
     protected abstract void onBuy();

@@ -9,6 +9,10 @@ public class TaskScheduler {
     }
 
     public Task scheduleTask(Runnable toRun, double delay, double period){
+        return scheduleTask(toRun, delay, period,false);
+    }
+
+    public Task scheduleTask(Runnable toRun, double delay, double period,boolean useRealTime){
         Task task=new Task(this) {
             @Override
             protected void run() {
@@ -17,6 +21,7 @@ public class TaskScheduler {
         };
         task.period=period;
         task.timeSinceLast=period-delay;
+        task.useRealTime=useRealTime;
         if(period==-1)
             task.runOnce=true;
         tasks.add(task);
@@ -28,7 +33,11 @@ public class TaskScheduler {
     }
 
     public Task scheduleTask(Runnable toRun,double delay){
-        return scheduleTask(toRun,delay,-1);
+       return scheduleTask(toRun, delay,false);
+    }
+
+    public Task scheduleTask(Runnable toRun,double delay,boolean useRealTime){
+        return scheduleTask(toRun,delay,-1,useRealTime);
     }
 
     void doTick(){

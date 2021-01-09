@@ -2,7 +2,7 @@ package ml.codeboy.engine.exampleGames.shooter;
 
 import ml.codeboy.engine.*;
 import ml.codeboy.engine.UI.Button;
-import ml.codeboy.engine.exampleGames.shooter.GameObjects.Bullet;
+import ml.codeboy.engine.exampleGames.menu.Menu;
 import ml.codeboy.engine.exampleGames.shooter.GameObjects.Enemy;
 import ml.codeboy.engine.exampleGames.shooter.GameObjects.Player;
 import ml.codeboy.engine.exampleGames.shooter.upgrades.*;
@@ -14,7 +14,8 @@ public class Shooter extends Game {
 
 
     public Shooter() {
-        super("Shooter");
+        super("Shooter");//,new UITheme(Color.GREEN,Color.BLACK,true)
+        defaultColor= theme.getForeground();
     }
 
     Task spawnerTask;
@@ -25,19 +26,69 @@ public class Shooter extends Game {
         spawnerTask=new Task(getScheduler()) {
             @Override
             protected void onCreation() {
+                period=3;
                 start();
             }
 
             @Override
             protected void run() {
-                if(period>0.7)
-                    period-=0.05;
+                if(period>0.1)
+                    period*=0.9999;
+                System.out.println(period);
                 spawnEnemy();
             }
         };
-        Button button=new Button(this,"||",this::togglePause);
-        button.setPosition(getWidth()-50,50);
-        button.setSize(20);
+        Button pause=new Button("||",this::togglePause);
+        pause.setTheme(theme);
+        pause.setPosition(getWidth()-50,50);
+        pause.setSize(30);
+
+        Button back=new Button("back",()->{launchGame(Menu.class);});
+        back.setTheme(theme);
+        back.setPosition(getWidth()-200,50);
+        back.setSize(30);
+
+        Button buy;
+        buy=new Button(Upgrade.getBuyAtOnce().name(),Upgrade::cycleBuyAtOnce){
+            @Override
+            public void press() {
+                super.press();
+                setText(Upgrade.getBuyAtOnce().name());
+            }
+        };
+        buy.setTheme(theme);
+        buy.setPosition(getWidth()-100,50);
+        buy.setSize(30);
+
+        Button button;
+        button=new Button("x"+getSpeed(),()->{}){
+            @Override
+            public void press() {
+                switch ((int) (getSpeed()*2)){
+                    case 1:{
+                        setSpeed(1);
+                        break;
+                    }
+                    case 2:{
+                        setSpeed(2);
+                        break;
+                    }
+                    case 4:{
+                        setSpeed(4);
+                        break;
+                    }
+                    case 8:{
+                        setSpeed(0.5);
+                        break;
+                    }
+                }
+                setText("x"+getSpeed());
+            }
+        };
+        button.setTheme(theme);
+        button.setPosition(getWidth()-150,50);
+        button.setSize(30);
+
         unPause();
     }
 
@@ -49,6 +100,8 @@ public class Shooter extends Game {
         new FireSpeed(this);
         new BulletSize(this);
         new Piercing(this);
+        new MultiShot();
+        new Lives();
     }
 
     public static void main(String[] args) {
@@ -62,15 +115,15 @@ public class Shooter extends Game {
 
     @Override
     protected void tick() {
-        int difficulty= (int) getSecondsRun()/2-Enemy.killed-Enemy.count;
-        for (int i = 0; i < difficulty; i++) {
-            spawnEnemy();
-        }
+//        int difficulty= (int) (getSecondsRun()/4)-Enemy.killed-Enemy.count;
+//        for (int i = 0; i < difficulty; i++) {
+//            spawnEnemy();
+//        }
     }
 
     Random random=new Random(1);
 
-    int radius=getFrame().getWidth()/2;
+    int radius= (int) (getWidth() *0.75);
 
     private void spawnEnemy(){
         double degree=random.nextDouble()*2*Math.PI;
@@ -93,6 +146,10 @@ public class Shooter extends Game {
         initialise();
     }
 
+    @Override
+    protected void exit() {
+        super.exit();
+    }
 
     @Override
     protected void displayStats(String[] toDisplay) {
