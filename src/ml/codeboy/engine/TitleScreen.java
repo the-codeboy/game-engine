@@ -29,4 +29,7 @@ public class TitleScreen extends Game{
         title=new UIText(getName(),getWidth()/2,getHeight()/4,getWidth()/2,getHeight()/4);
     }
 
+    @Override
+    protected void displayStats(String[] toDisplay) {}
+
 }

@@ -23,7 +23,7 @@ public class ButtonGroup extends UIObject{
         buttonHeight=(getHeight()/getNumberOfButtons())-spaceBetweenButtons;
         if(buttonHeight>preferredButtonHeight)
             buttonHeight=preferredButtonHeight;
-        int xPos=getX()+getWidth()/2;
+        int xPos=getX();
         for (int i = 0, buttonsSize = buttons.size(); i < buttonsSize; i++) {
             Button button = buttons.get(i);
             button.setWidthAndHeight(buttonWidth,buttonHeight);

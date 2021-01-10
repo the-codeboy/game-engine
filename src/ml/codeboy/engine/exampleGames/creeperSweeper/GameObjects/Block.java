@@ -3,12 +3,14 @@ package ml.codeboy.engine.exampleGames.creeperSweeper.GameObjects;
 import ml.codeboy.engine.Game;
 import ml.codeboy.engine.GameObject;
 import ml.codeboy.engine.Sprites;
+import ml.codeboy.engine.UI.UIObject;
+import ml.codeboy.engine.exampleGames.creeperSweeper.CreeperSweeper;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Block extends GameObject {
-    private static BufferedImage grass,pathWay;
+public class Block extends UIObject {
+    private static final BufferedImage grass,pathWay;
     
     static{
         grass=Sprites.getSprite("grass.png").getSubimage(20,20,120,120);
@@ -21,11 +23,17 @@ public class Block extends GameObject {
 
     private BlockType blockType=BlockType.GRASS;
     private boolean isCreeper;
+    CreeperSweeper cs;
 
-    public Block(Game game,boolean isCreeper) {
-        super(game,SpriteType.Custom);
+    public Block(CreeperSweeper cs,boolean isCreeper) {
+        super();
         this.isCreeper=isCreeper;
-        setSize(120);
+        this.cs=cs;
+    }
+
+    @Override
+    public void press() {
+        cs.doNextTick(cs::loose);
     }
 
     @Override

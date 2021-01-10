@@ -104,9 +104,6 @@ public class Shooter extends Game {
         new Lives();
     }
 
-    public static void main(String[] args) {
-        new Shooter();
-    }
 
     public static Shooter get(){
         return (Shooter) Game.get();

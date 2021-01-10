@@ -48,9 +48,9 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
     public void mouseClicked(MouseEvent e) {
         Game.doNext(()->{
             for (Sprite sprite:Layer.UI.getSprites()){
-                if(sprite instanceof Button){
+                if(sprite instanceof UIObject){
                     if(sprite.isTouching(getMousePosition())){
-                        ((Button) sprite).press();
+                        ((UIObject) sprite).press();
                         return;
                     }
                 }

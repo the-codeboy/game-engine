@@ -176,10 +176,10 @@ public class GameObject extends Sprite{
 
     private boolean listenForCollision=false;
     private Class<?extends GameObject>type=GameObject.class;
-    private void physicsUpdate(){
+    private <type> void physicsUpdate(){
         if(hasCollision&&listenForCollision){
             for (GameObject other:gameObjects){
-                if(other.getClass().equals(type)&&other!=this&&other.collidesWith(this)){
+                if(other!=null&&other.getClass().isAssignableFrom(type)&&other!=this&&other.collidesWith(this)){
                     onCollision(other);
                 }
             }
