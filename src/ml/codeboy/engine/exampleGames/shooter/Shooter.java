@@ -16,13 +16,11 @@ public class Shooter extends Game {
     public Shooter() {
         super("Shooter");//,new UITheme(Color.GREEN,Color.BLACK,true)
         defaultColor= theme.getForeground();
-        setTargetFPS(60);
     }
 
     Task spawnerTask;
     @Override
     protected void initialise() {
-        //Animation.fromGif("gif.gif");
         player=new Player(this);
         getScheduler().scheduleTask(this::initUpgrades,0);
         spawnerTask=new Task(getScheduler()) {
@@ -36,6 +34,7 @@ public class Shooter extends Game {
             protected void run() {
                 if(period>0.1)
                     period*=0.9999;
+                System.out.println(period);
                 spawnEnemy();
             }
         };

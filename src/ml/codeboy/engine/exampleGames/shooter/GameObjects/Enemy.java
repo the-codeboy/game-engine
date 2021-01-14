@@ -1,6 +1,5 @@
 package ml.codeboy.engine.exampleGames.shooter.GameObjects;
 
-import ml.codeboy.engine.Animation;
 import ml.codeboy.engine.Game;
 import ml.codeboy.engine.events.DestroyEvent;
 import ml.codeboy.engine.exampleGames.shooter.Shooter;
@@ -13,8 +12,6 @@ public class Enemy extends Damageable{
     }
     public Enemy(Game game,int speed) {
         super(game,SpriteType.Rectangle);
-        //setAnimation(Animation.fromGif("gif.gif"));
-        //getAnimation().setDelayBetweenFrames(0.1f);
         this.speed=speed;
         setCollision(true);
         count++;

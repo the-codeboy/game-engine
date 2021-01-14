@@ -1,5 +1,7 @@
 package ml.codeboy.engine;
 
+import com.sun.istack.internal.Nullable;
+
 import java.util.ArrayList;
 
 public enum Layer {
@@ -18,6 +20,7 @@ public enum Layer {
         getSprites().clear();
     }
 
+    @Nullable
     public Layer getNext(){
         return hasNext()?values()[ordinal()-1]:null;
     }

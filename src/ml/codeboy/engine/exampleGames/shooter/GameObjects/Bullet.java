@@ -1,6 +1,5 @@
 package ml.codeboy.engine.exampleGames.shooter.GameObjects;
 
-import ml.codeboy.engine.Animation;
 import ml.codeboy.engine.Game;
 import ml.codeboy.engine.GameObject;
 import ml.codeboy.engine.events.DestroyEvent;
@@ -12,8 +11,7 @@ public class Bullet extends Damageable {
     double speed=20;
     public static int count=0;
     public Bullet(Game game,double dirX,double dirY) {
-        super(game,SpriteType.Circle);
-        //setAnimation(Animation.fromGif("gif.gif"));
+        super(game);
         game.getScheduler().scheduleTask(this::destroy,3);
         setSize(5);
         this.dirX=dirX;
@@ -42,7 +40,7 @@ public class Bullet extends Damageable {
     }
 
     @Override
-    public void customRender(Graphics2D g) {
+    public void render(Graphics2D g) {
         g.drawOval(getX()-getSize()/2,getY()-getSize()/2,getSize(),getSize());
     }
 }

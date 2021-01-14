@@ -1,11 +1,6 @@
 ml.codeboy.engine
 ml.codeboy.engine.UI
 ml.codeboy.engine.events
-ml.codeboy.engine.exampleGames
-ml.codeboy.engine.exampleGames.AnimationTest
-ml.codeboy.engine.exampleGames.creeperSweeper
-ml.codeboy.engine.exampleGames.creeperSweeper.GameObjects
-ml.codeboy.engine.exampleGames.menu
 ml.codeboy.engine.exampleGames.shooter
 ml.codeboy.engine.exampleGames.shooter.GameObjects
 ml.codeboy.engine.exampleGames.shooter.upgrades

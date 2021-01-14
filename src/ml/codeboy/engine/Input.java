@@ -1,5 +1,6 @@
 package ml.codeboy.engine;
 
+import ml.codeboy.engine.UI.Button;
 import ml.codeboy.engine.UI.UIObject;
 import ml.codeboy.engine.exampleGames.shooter.Shooter;
 
@@ -11,7 +12,7 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
 
     private static Input input;
 
-    static Input getInstance(){
+    public static Input getInstance(){
         return input!=null?input:(input=new Input());
     }
 
@@ -47,7 +48,7 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
     public void mouseClicked(MouseEvent e) {
         Game.doNext(()->{
             for (Sprite sprite:Layer.UI.getSprites()){
-                if(sprite instanceof UIObject&&sprite.isInteractable()){
+                if(sprite instanceof UIObject){
                     if(sprite.isTouching(getMousePosition())){
                         ((UIObject) sprite).press();
                         return;

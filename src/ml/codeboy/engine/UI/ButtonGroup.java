@@ -9,15 +9,9 @@ public class ButtonGroup extends UIObject{
     private int spaceBetweenButtons=20,buttonHeight,buttonWidth,preferredButtonHeight=50;
     private final ArrayList<Button>buttons=new ArrayList<>();
 
-    public Button addButton(String text){
-        return addButton(text,()->{});
-    }
-
-    public Button addButton(String text,Runnable onClick){
-        Button button=new Button(text,onClick);
-        buttons.add(button);
+    public void addButton(String text,Runnable onClick){
+        buttons.add(new Button(text,onClick));
         recalculateValues();
-        return button;
     }
 
     private int getNumberOfButtons(){

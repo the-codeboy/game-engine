@@ -1,5 +1,6 @@
 package ml.codeboy.engine;
 
+import com.sun.istack.internal.Nullable;
 import ml.codeboy.engine.UI.UITheme;
 
 import javax.swing.*;
@@ -9,10 +10,6 @@ import java.awt.image.BufferedImage;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-/**
- * represents a Game
- * there can only be one instance of this at the time
- */
 public abstract class Game implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener{
 
     private static Game instance;
@@ -36,21 +33,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     private double lastFrame=System.nanoTime();
     private int FPS;
     private final long start=System.currentTimeMillis()/1000;
-
-    private int targetFPS=Integer.MAX_VALUE;
-    private long targetDeltaTime=0;
     private boolean closed=false;
-
-
-    /**
-     * sets the target FPS of this Game - I do not recommend using this as it can only decrease your FPS
-     * - by default the FPS are not limited
-     * @param targetFPS the new targetFPS
-     */
-    public void setTargetFPS(int targetFPS) {
-        this.targetFPS = targetFPS;
-        targetDeltaTime= 1000000000/(targetFPS+1);
-    }
 
     private BufferedImage backgroundImage;
 
@@ -91,7 +74,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
 
     /**
      * @return gets the TaskScheduler of this Game. The TaskScheduler can be used to schedule Tasks which will
-     * be run at a specified interval or once a certain time. For more information see {@link TaskScheduler#scheduleTask}
+     * be run at a specified interval or once a certain time. For more information see TaskScheduler#scheduleTask
      */
     public TaskScheduler getScheduler() {
         return scheduler;
@@ -102,7 +85,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     }
 
     /**
-     * @return the JFrame this Game is rendering to -
+     * @return the JFrame this Game is rendering to
      * might be removed in a future release but is still safe to use at the moment
      */
     @Deprecated
@@ -179,7 +162,6 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
      * creates the window for the Game and initialises listeners - also starts the gameLoop
      */
     private void init(){
-        registerListeners();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         if(fullScreen) {
             if(!getFrame().isDisplayable())
@@ -212,7 +194,6 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
 
     protected void exit(){
         closed=true;
-        unregisterListeners();
     }
 
 
@@ -255,6 +236,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     /**
      * @return the current Game singleton
      */
+    @Nullable
     public static Game get(){
         return instance;
     }
@@ -275,14 +257,6 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         while(!closed){
             double now = System.nanoTime();
             double deltaTime = now - lastFrame;
-            if(deltaTime<targetDeltaTime){
-//                try {
-//                    Thread.sleep((long) ((targetDeltaTime-deltaTime)*0.9)/1000000000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-                continue;
-            }
             lastFrame= now;
             deltaSeconds= deltaTime /1000000000;
             if((now -lastFPS)>1000000000) {
@@ -327,9 +301,8 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
      */
     private void render(){
         graphics.clearRect(0,0,screen.getWidth(),screen.getHeight());
-        if(backgroundImage!=null) {
-            graphics.drawImage(backgroundImage, 0, 0, null);
-        }
+        if(backgroundImage!=null)
+            graphics.drawImage(backgroundImage,0,0,null);
         Layer currentLayer=Layer.BACKGROUND;
         while (currentLayer!=null){
             for (Sprite sprite :
@@ -395,24 +368,15 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
 
     private boolean isPaused=false;
 
-    /**
-     * pauses this Game
-     */
     public void pause(){
         isPaused=true;
     }
 
-    /**
-     * unpauses this Game
-     */
     public void unPause(){
         isPaused=false;
         isGameOver=false;
     }
 
-    /**
-     * toggles if this Game is paused
-     */
     public void togglePause(){
         if(!isGameOver) {
             if (isPaused)
@@ -422,16 +386,10 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         }
     }
 
-    /**
-     * @return if this Game is GameOver
-     */
     public boolean isGameOver() {
         return isGameOver;
     }
 
-    /**
-     * @param gameOver if the Game is GameOver
-     */
     public void setGameOver(boolean gameOver) {
         isGameOver = gameOver;
         if(isGameOver)
@@ -442,21 +400,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
 
     private boolean isGameOver=false;
 
-    private void registerListeners(){
-        frame.addKeyListener(this);
-        frame.addMouseListener(this);
-        frame.addMouseWheelListener(this);
-        frame.addMouseMotionListener(this);
-    }
 
-    private void unregisterListeners(){
-        frame.removeKeyListener(this);
-        frame.removeMouseListener(this);
-        frame.removeMouseWheelListener(this);
-        frame.removeMouseMotionListener(this);
-    }
-
-    //<editor-fold desc="windowEvents">
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -511,36 +455,26 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     public void mouseWheelMoved(MouseWheelEvent e) {
 
     }
-    //</editor-fold>
 
-    /**
-     * called before tick once per tick
-     */
     protected void earlyTick(){}
 
-    /**
-     * called once per tick
-     */
     protected void tick(){}
 
-    /**
-     * called once per tick after {@link Game#tick()}
-     */
     protected void lateTick(){}
 
 
-    //<editor-fold desc="getter">
     /**
      * @return mouse x position
-     * @deprecated this returns the position on screen use {@link Input#getMouseX()}
+     * @deprecated this returns the position on screen use Input#getMouseX()
      */
+    //<editor-fold desc="getter">
     @Deprecated
     public static int getMouseX(){
         return MouseInfo.getPointerInfo().getLocation().x;
     }
     /**
      * @return mouse y position
-     * @deprecated this returns the position on screen use {@link Input#getMouseY()}
+     * @deprecated this returns the position on screen use Input#getMouseY()
      */
     @Deprecated
     public static int getMouseY(){
@@ -551,6 +485,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
      * @return the time in seconds that passed since the last frame or 0 if there is no Game
      * @param ignorePaused if paused should be ignored - see Game#getDeltaTime
      */
+    @Nullable
     public static double deltaTime(boolean ignorePaused){
         if(get()==null)
             return 0;
@@ -560,6 +495,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     /**
      * @return the time since the last frame
      */
+    @Nullable
     public static double deltaTime(){
         return deltaTime(false);
     }
