@@ -39,7 +39,7 @@ public class Sprite {
         this.color = color;
     }
 
-    private Color color;
+    private Color color=Game.get().defaultColor;
 
     public enum SpriteType {
         Image,Circle,Rectangle,Custom;

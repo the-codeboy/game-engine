@@ -46,6 +46,10 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
 
     @Override
     public void mouseClicked(MouseEvent e) {
+//        buttonPress();
+    }
+
+    private void buttonPress(){
         Game.doNext(()->{
             for (Sprite sprite:Layer.UI.getSprites()){
                 if(sprite instanceof UIObject){
@@ -83,6 +87,7 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
         if (e.getButton() == MouseEvent.BUTTON1) {
             mouseDown = false;
         }
+        buttonPress();
     }
 
     @Override

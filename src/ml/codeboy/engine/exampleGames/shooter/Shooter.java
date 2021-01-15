@@ -26,16 +26,22 @@ public class Shooter extends Game {
         spawnerTask=new Task(getScheduler()) {
             @Override
             protected void onCreation() {
-                period=3;
+                period=10;
                 start();
+                doNext(this::run);
             }
+            int wave=1;
 
             @Override
             protected void run() {
-                if(period>0.1)
+                if(period>5)
                     period*=0.9999;
-                System.out.println(period);
-                spawnEnemy();
+                wave++;
+                for (int i = 0, times = 1+(int) (Math.log(wave)); i < times; i++) {
+                    int level = 1+(int) (Math.random()*wave*0.1);
+                    System.out.println("spawning enemy level "+level);
+                    spawnEnemy((int) (radius+radius*Math.random())).setLevel(level);
+                }
             }
         };
         Button pause=new Button("||",this::togglePause);
@@ -122,11 +128,13 @@ public class Shooter extends Game {
 
     int radius= (int) (getWidth() *0.75);
 
-    private void spawnEnemy(){
+    private Enemy spawnEnemy(int radius){
         double degree=random.nextDouble()*2*Math.PI;
         int x= (int) (Math.sin(degree)*radius);
         int y= (int) (Math.cos(degree)*radius);
-        new Enemy(this).setPosition(getPlayer().getX()+x,getPlayer().getY()+y);
+        Enemy enemy= new Enemy(this);
+        enemy.setPosition(getPlayer().getX()+x,getPlayer().getY()+y);
+        return enemy;
     }
 
     public Player getPlayer(){

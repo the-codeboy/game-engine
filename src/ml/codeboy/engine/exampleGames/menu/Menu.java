@@ -14,6 +14,7 @@ public class Menu extends TitleScreen {
     }
 
     private void launchShooter(){
+        System.out.println("launching game");
         launchGame(Shooter.class);
     }
 }

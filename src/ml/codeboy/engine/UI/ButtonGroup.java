@@ -44,6 +44,7 @@ public class ButtonGroup extends UIObject{
 
     public ButtonGroup(int x, int y, int width, int height) {
         this();
+        setInteractable(false);
         setX(x);
         setY(y);
         setWidthAndHeight(width, height);

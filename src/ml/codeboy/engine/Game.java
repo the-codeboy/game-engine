@@ -9,6 +9,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ConcurrentModificationException;
 
 public abstract class Game implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener{
 
@@ -263,8 +264,12 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
                 FPS = (int)(1000000000 / deltaTime);
                 lastFPS= now;
             }
-            executeGameLogic();
-            render();
+            try {
+                executeGameLogic();
+                render();
+            }catch (ConcurrentModificationException e){
+                e.printStackTrace();
+            }
         }
         instance=null;
         onExit();
