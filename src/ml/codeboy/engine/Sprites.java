@@ -5,35 +5,36 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Sprites {
     private static Sprites sprites_instance=new Sprites();
+    public static final BufferedImage error=getSprite("error.png");
     public Sprites(){
         sprites_instance=this;
     }
     public static BufferedImage getSprite(String path){
         return sprites_instance.find(path);
     }
-    public ArrayList<String> spriteNames=new ArrayList<>();
-    public ArrayList<BufferedImage> sprites=new ArrayList<>();
+    private HashMap<String,BufferedImage> loadedSprites=new HashMap<>();
 
     public BufferedImage find(String path){
-        for (int i = 0; i < spriteNames.size(); i++) {
-            if (spriteNames.get(i).equals(path))
-                return sprites.get(i);
-        }
+        if(loadedSprites.containsKey(path))
+            return loadedSprites.get(path);
         return read(path);
     }
+
     public BufferedImage read(String path){
-        BufferedImage img = null;
+        BufferedImage img;
         try {
+//            System.out.println("Sprites/" + path+" : "+Sprites.class.getClassLoader().getResource(""));
             img = ImageIO.read(getClass().getClassLoader().getResource("Sprites/" + path));
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("can´t find " + path + " !!!");
+            return null;
         }
-        spriteNames.add(path);
-        sprites.add(img);
+        loadedSprites.put(path,img);
         return img;
     }
 }

@@ -3,7 +3,7 @@ package ml.codeboy.engine;
 import java.util.ArrayList;
 
 public class TaskScheduler {
-    private ArrayList<Task>tasks=new ArrayList<>();
+    private final ArrayList<Task>tasks=new ArrayList<>();
     TaskScheduler(Game game){
 
     }
@@ -29,7 +29,9 @@ public class TaskScheduler {
     }
 
     void scheduleTask(Task task){
+        if(task!=null)
         tasks.add(task);
+        else System.err.println("trying to schedule null");
     }
 
     public Task scheduleTask(Runnable toRun,double delay){
@@ -43,6 +45,10 @@ public class TaskScheduler {
     void doTick(){
         for (int i = 0, tasksSize = tasks.size(); i < tasksSize; i++) {
             Task task = tasks.get(i);
+            if(task==null){
+                tasks.remove(i++);
+                continue;
+            }
             task.tick();
             if(task.isCanceled) {
                 tasks.remove(i++);

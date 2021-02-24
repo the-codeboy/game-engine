@@ -94,7 +94,7 @@ public class UIObject extends Sprite {
     private Graphics2D g;
 
     @Override
-    public void render(Graphics2D g) {
+    public void customRender(Graphics2D g) {
         this.g=g;
         if(isAnimated()){
             if (isTouching(Input.getMousePosition())) {

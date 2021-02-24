@@ -1,5 +1,6 @@
 package ml.codeboy.engine.exampleGames.shooter.GameObjects;
 
+import ml.codeboy.engine.Damageable;
 import ml.codeboy.engine.Game;
 import ml.codeboy.engine.GameObject;
 import ml.codeboy.engine.UI.Button;
@@ -30,7 +31,7 @@ public class Player extends Damageable {
 
     private static Player player;
     public Player(Game game) {
-        super(game);
+        super(game,SpriteType.Custom);
         if(player!=null)
             throw new IllegalStateException("player exists already");
         player=this;
@@ -146,8 +147,8 @@ public class Player extends Damageable {
     }
 
     @Override
-    public void render(Graphics2D g) {
-        g.drawOval(getX()-getWidth()/2,getY()-getHeight()/2,getWidth(),getHeight());
-        g.drawLine(getX(),getY(),(int)(getX()+xDir),(int)(getY()+yDir));
+    public void customRender(Graphics2D g) {
+        g.drawOval(getXOnScreen()-getWidth()/2,getYOnScreen()-getHeight()/2,getWidth(),getHeight());
+        g.drawLine(getXOnScreen(),getYOnScreen(),(int)(getX()+xDir),(int)(getY()+yDir));
     }
 }

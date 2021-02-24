@@ -37,7 +37,7 @@ public class Block extends UIObject {
     }
 
     @Override
-    public void render(Graphics2D g) {
+    public void customRender(Graphics2D g) {
         if(blockType==BlockType.GRASS)
         g.drawImage(grass, getX() -getWidth()/2, getY() -getHeight()/2,getWidth(),getHeight(),null);
         else if(blockType==BlockType.PATHWAY)

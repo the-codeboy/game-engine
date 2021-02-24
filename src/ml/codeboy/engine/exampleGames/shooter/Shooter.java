@@ -7,6 +7,7 @@ import ml.codeboy.engine.exampleGames.shooter.GameObjects.Enemy;
 import ml.codeboy.engine.exampleGames.shooter.GameObjects.Player;
 import ml.codeboy.engine.exampleGames.shooter.upgrades.*;
 
+import java.awt.event.KeyEvent;
 import java.util.Random;
 
 public class Shooter extends Game {
@@ -28,7 +29,7 @@ public class Shooter extends Game {
             protected void onCreation() {
                 period=10;
                 start();
-                doNext(this::run);
+                getScheduler().scheduleTask(this::run,0);
             }
             int wave=1;
 
@@ -118,6 +119,16 @@ public class Shooter extends Game {
 
     @Override
     protected void tick() {
+//        int speed=100;
+//        if(Input.isKeyDown(KeyEvent.VK_LEFT))
+//            getCamera().addX(-deltaTime()*speed);
+//        if(Input.isKeyDown(KeyEvent.VK_RIGHT))
+//            getCamera().addX(deltaTime()*speed);
+//        if(Input.isKeyDown(KeyEvent.VK_UP))
+//            getCamera().addY(-deltaTime()*speed);
+//        if(Input.isKeyDown(KeyEvent.VK_DOWN))
+//            getCamera().addY(deltaTime()*speed);
+
 //        int difficulty= (int) (getSecondsRun()/4)-Enemy.killed-Enemy.count;
 //        for (int i = 0; i < difficulty; i++) {
 //            spawnEnemy();

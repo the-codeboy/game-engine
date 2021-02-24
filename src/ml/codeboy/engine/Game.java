@@ -30,11 +30,23 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     private final boolean fullScreen;
     private Graphics2D graphics;
 
+    private Scene scene;
+
     private double lastFPS;
-    private double lastFrame=System.nanoTime();
+    private long lastFrame=System.nanoTime();
     private int FPS;
     private final long start=System.currentTimeMillis()/1000;
     private boolean closed=false;
+
+    public Camera getCamera() {
+        return camera;
+    }
+
+    public Point getCameraPosition() {
+        return camera!=null?camera.getPosition():new Point();
+    }
+
+    private Camera camera;
 
     private BufferedImage backgroundImage;
 
@@ -85,6 +97,18 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         return new Point(getFrame().getWidth()/2,getFrame().getHeight()/2);
     }
 
+    Graphics2D getGraphics() {
+        return graphics;
+    }
+
+    BufferedImage getScreen() {
+        return screen;
+    }
+
+    BufferedImage getBackgroundImage() {
+        return backgroundImage;
+    }
+
     /**
      * @return the JFrame this Game is rendering to
      * might be removed in a future release but is still safe to use at the moment
@@ -109,7 +133,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     }
 
     /**
-     * @param name nmae of the Game
+     * @param name name of the Game
      * @param theme UITheme of the Game
      */
     public Game(String name,UITheme theme) {
@@ -124,11 +148,11 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
      */
     @Deprecated
     public Game(String name, int preferredX, int preferredY) {
-        this.name = name;
-        this.fullScreen = false;
         if(instance!=null)
             throw new IllegalStateException("can not create second instance of game!");
         instance=this;
+        this.name = name;
+        this.fullScreen = false;
         this.preferredX = preferredX;
         this.preferredY = preferredY;
         init();
@@ -187,6 +211,9 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
 
 
         graphics=screen.createGraphics();
+        camera=new Camera(this);
+        camera.setLayer(Layer.INVISIBLE);
+        scene=new Scene(this);
         initialise();
         Thread gameThread = new Thread(this::startGameLoop);
         gameThread.start();
@@ -250,23 +277,49 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     @Deprecated
     protected void initialise(){}
 
+    private long tickStartTime,gameLogic,render,schedulerTime,earlyTick,tick,lateTick,internalTick,fullTick;
+    private long average_gameLogic,average_render,average_schedulerTime,average_earlyTick,average_tick,average_lateTick,average_internalTick,average_fullTick;
     /**
      * starts the gameLoop
      * this is synchronised so that you wont have problems with multithreading
      */
     private synchronized void startGameLoop(){
         while(!closed){
-            double now = System.nanoTime();
-            double deltaTime = now - lastFrame;
-            lastFrame= now;
+            tickStartTime = System.nanoTime();
+            double deltaTime = tickStartTime - lastFrame;
+            lastFrame= tickStartTime;
             deltaSeconds= deltaTime /1000000000;
-            if((now -lastFPS)>1000000000) {
+            if((tickStartTime -lastFPS)>1000000000) {
                 FPS = (int)(1000000000 / deltaTime);
-                lastFPS= now;
+                lastFPS= tickStartTime;
+
+                stats= new String[]{"FPS: " + FPS, "full tick: " + average_fullTick,"render time: "+average_render,"scheduler time: "+average_schedulerTime,
+                "early tick: "+average_earlyTick,"tick: "+average_tick,"internal tick: "+average_internalTick,"late tick: "+average_lateTick};
+
+                average_gameLogic=0;
+                average_render=0;
+                average_schedulerTime =0;
+                average_earlyTick=0;
+                average_tick=0;
+                average_lateTick=0;
+                average_internalTick=0;
+                average_fullTick=0;
             }
+            average_gameLogic+=gameLogic;
+            average_render+=render;
+            average_schedulerTime +=schedulerTime;
+            average_earlyTick+=earlyTick;
+            average_tick+=tick;
+            average_lateTick+=lateTick;
+            average_internalTick+=internalTick;
+            average_fullTick+=fullTick;
             try {
+                tickStartTime = System.currentTimeMillis();
                 executeGameLogic();
+                gameLogic= System.currentTimeMillis()-tickStartTime;
                 render();
+                render= System.currentTimeMillis()-tickStartTime-gameLogic;
+                fullTick = System.currentTimeMillis()-tickStartTime;
             }catch (ConcurrentModificationException e){
                 e.printStackTrace();
             }
@@ -280,25 +333,30 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
      */
     private void executeGameLogic(){
         scheduler.doTick();
-        for (GameObject object :
-                GameObject.getGameObjects()) {
-            object.internalTick();
-        }
+        schedulerTime = System.currentTimeMillis()-tickStartTime;
         earlyTick();
         for (GameObject object :
                 GameObject.getGameObjects()) {
             object.earlyTick();
         }
+        earlyTick = System.currentTimeMillis()-tickStartTime-schedulerTime;
+        for (GameObject object :
+                GameObject.getGameObjects()) {
+            object.internalTick();
+        }
+        internalTick = System.currentTimeMillis()-tickStartTime-schedulerTime-earlyTick;
         tick();
         for (GameObject object :
                 GameObject.getGameObjects()) {
             object.tick();
         }
+        tick = System.currentTimeMillis()-tickStartTime-schedulerTime-earlyTick-internalTick;
         lateTick();
         for (GameObject object :
                 GameObject.getGameObjects()) {
             object.lateTick();
         }
+        lateTick = System.currentTimeMillis()-tickStartTime-schedulerTime-earlyTick-internalTick-tick;
     }
 
     /**
@@ -317,10 +375,12 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
             currentLayer=currentLayer.getNext();
         }
         graphics.setFont(graphics.getFont().deriveFont(20f));
-        displayStats(new String[]{"FPS: " + FPS, "some other info", "even more info"});
+        displayStats(stats);
 
         getFrame().getGraphics().drawImage(screen,0,0,getWidth(),getHeight(),null);
     }
+
+    private String[] stats={};
 
     /**
      * @param toDisplay a String array with information to be displayed on the top left of the screen
@@ -328,6 +388,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
      *                  even if you don´t have stats to display you should definitely override this
      */
     protected void displayStats(String[]toDisplay){
+        graphics.setColor(Color.WHITE);
         int textHeight = graphics.getFontMetrics().getHeight();
         for (int i = 0; i < toDisplay.length; i++) {
             graphics.drawString(toDisplay[i],10,textHeight+textHeight*i);
@@ -532,6 +593,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     public static void doNext(Runnable runnable){
         if(get()!=null)
         get().getScheduler().scheduleTask(runnable,0,true);
+        else System.err.println("there is no game");
     }
     //</editor-fold>
 }

@@ -5,6 +5,8 @@ import ml.codeboy.engine.UI.UIObject;
 import ml.codeboy.engine.UI.UIText;
 import ml.codeboy.engine.UI.UITheme;
 
+import java.util.Arrays;
+
 public class TitleScreen extends Game{
     protected UIText title;
     protected ButtonGroup group;
@@ -16,7 +18,7 @@ public class TitleScreen extends Game{
     public TitleScreen(String name, UITheme theme) {
         super(name, theme);
         addTitle();
-        group=new ButtonGroup(getWidth()/2, (int) (getHeight()*0.75),getWidth()/4,getHeight()/2);
+        group=new ButtonGroup(getWidth()/2, (int) (getHeight()*0.7),getWidth()/4,getHeight()/2);
     }
 
     protected void addButton(String text,Runnable onClick){
@@ -30,6 +32,7 @@ public class TitleScreen extends Game{
     }
 
     @Override
-    protected void displayStats(String[] toDisplay) {}
+    protected void displayStats(String[] toDisplay) {
+    }
 
 }

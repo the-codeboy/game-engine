@@ -1,10 +1,9 @@
 package ml.codeboy.engine.exampleGames.shooter.GameObjects;
 
+import ml.codeboy.engine.Damageable;
 import ml.codeboy.engine.Game;
 import ml.codeboy.engine.GameObject;
 import ml.codeboy.engine.events.DestroyEvent;
-
-import java.awt.*;
 
 public class Bullet extends Damageable {
     double dirX,dirY;

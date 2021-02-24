@@ -2,7 +2,8 @@ package ml.codeboy.engine.exampleGames.menu;
 
 import ml.codeboy.engine.TitleScreen;
 import ml.codeboy.engine.UI.UITheme;
-import ml.codeboy.engine.exampleGames.creeperSweeper.CreeperSweeperTitleScreen;
+import ml.codeboy.engine.exampleGames.examples.Examples;
+import ml.codeboy.engine.exampleGames.rpg.Rpg;
 import ml.codeboy.engine.exampleGames.shooter.Shooter;
 
 public class Menu extends TitleScreen {
@@ -10,11 +11,11 @@ public class Menu extends TitleScreen {
         super("Example Games");
         title.setTheme(UITheme.PLAIN_TEXT);
         addButton("Shooter",this::launchShooter);
-        addButton("Creeper Sweeper",()->launchGame(CreeperSweeperTitleScreen.class));
+        addButton("RPG",()->launchGame(Rpg.class));
+        addButton("Examples",()->launchGame(Examples.class));
     }
 
     private void launchShooter(){
-        System.out.println("launching game");
         launchGame(Shooter.class);
     }
 }

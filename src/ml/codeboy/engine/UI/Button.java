@@ -7,6 +7,7 @@ public class Button extends UIObject{
         setAnimated(true);
         setText(text);
         runnable=onClick;
+        setInteractable(true);
     }
 
     @Override

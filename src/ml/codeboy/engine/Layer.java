@@ -16,7 +16,7 @@ public enum Layer {
     }
 
     public void clear(){
-        getSprites().forEach(Sprite::destroy);
+        //getSprites().forEach(Sprite::destroy);
         getSprites().clear();
     }
 

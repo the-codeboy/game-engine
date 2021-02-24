@@ -12,6 +12,8 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
 
     private static Input input;
 
+    public static boolean debugMode=false;
+
     public static Input getInstance(){
         return input!=null?input:(input=new Input());
     }
@@ -54,7 +56,7 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
             for (Sprite sprite:Layer.UI.getSprites()){
                 if(sprite instanceof UIObject){
                     if(sprite.isTouching(getMousePosition())){
-                        ((UIObject) sprite).press();
+                        Game.doNext(((UIObject) sprite)::press);
                         return;
                     }
                 }
@@ -71,6 +73,16 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
             }else System.out.println("GameObject on UI Layer that is not instance of UIObject: "+sprite);
         }
         return false;
+    }
+
+    public static int horizontal(){
+        return (isKeyDown(KeyEvent.VK_LEFT)||isKeyDown(KeyEvent.VK_A)?-1:0)+
+                (isKeyDown(KeyEvent.VK_RIGHT)||isKeyDown(KeyEvent.VK_D)?1:0);
+    }
+
+    public static int vertical(){
+        return (isKeyDown(KeyEvent.VK_UP)||isKeyDown(KeyEvent.VK_W)?-1:0)+
+                (isKeyDown(KeyEvent.VK_DOWN)||isKeyDown(KeyEvent.VK_S)?1:0);
     }
 
     @Override
@@ -118,6 +130,10 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
         if(e.getKeyCode()==KeyEvent.VK_SPACE)
             Game.get().doNextTick(Game.get()::togglePause);
         keys.put(e.getKeyCode(),false);
+        if(e.getKeyCode()==KeyEvent.VK_F3) {
+            debugMode = !debugMode;
+            System.out.println("debug mode "+(debugMode?"enabled":"disabled"));
+        }
     }
 
     @Override

@@ -6,6 +6,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class GameObject extends Sprite{
 
@@ -123,8 +124,22 @@ public class GameObject extends Sprite{
                 addY((target.y - startingPos.y)*deltaTime/(timeLeft+deltaTime));
             }
         }
-        if(isListeningForCollision())
+        if(isListeningForCollision()&&(isPhysicsTick=(nextPhysicsUpdate-=deltaTime)<0)) {
+            nextPhysicsUpdate+=physicsUpdateEvery;
             physicsUpdate();
+        }
+    }
+
+    private double nextPhysicsUpdate=Math.random(),physicsUpdateEvery=0.5;
+    private boolean isPhysicsTick=false;
+
+    protected boolean isPhysicsTick(){
+        return isPhysicsTick;
+    }
+
+    protected void setPhysicsUpdateEvery(double physicsUpdateEvery) {
+        this.physicsUpdateEvery = physicsUpdateEvery;
+        nextPhysicsUpdate=0;
     }
 
     public boolean isMouseDown(){
@@ -156,7 +171,7 @@ public class GameObject extends Sprite{
         this.hasCollision = hasCollision;
     }
 
-    private boolean hasCollision=false;
+    private boolean hasCollision=true;
 
     public boolean isListeningForCollision() {
         return listenForCollision;
@@ -176,30 +191,46 @@ public class GameObject extends Sprite{
 
     private boolean listenForCollision=false;
     private Class<?extends GameObject>type=GameObject.class;
-    private <type> void physicsUpdate(){
+    private HashSet<GameObject> lastTickCollisions=new HashSet<>();
+
+    private void physicsUpdate(){
         if(hasCollision&&listenForCollision){
+            HashSet<GameObject>thisTickCollisions=new HashSet<>();
             for (GameObject other:gameObjects){
                 if(other!=null&&other.getClass().isAssignableFrom(type)&&other!=this&&other.collidesWith(this)){
+                    if(!lastTickCollisions.contains(other))
                     onCollision(other);
+                    else
+                    onCollisionStay(other);
+                    thisTickCollisions.add(other);
                 }
             }
+            lastTickCollisions=thisTickCollisions;
         }
+    }
+
+    public HashSet<GameObject> getCollidingObjects() {
+        return lastTickCollisions;
     }
 
     private boolean collidesWith(GameObject other){
         if(!hasCollision||!other.hasCollision)
             return false;
-        if (getY()+getHeight() < other.getY()
-                || getY() > other.getY()+other.getHeight()) {
+        if (getY()+getHeight()/2 < other.getY()-other.getHeight()/2
+                || getY()-getHeight()/2 > other.getY()+other.getHeight()/2) {
             return false;
         }
-        else if(getX() + getWidth() >= other.getX()
-                && getX() <= other.getX() + other.getWidth())
+        else if(getX() + getWidth()/2 >= other.getX()-other.getWidth()/2
+                && getX()-getWidth()/2 <= other.getX() + other.getWidth()/2)
             return true;
             return false;
     }
 
     protected void onCollision(GameObject other){
+
+    }
+
+    protected void onCollisionStay(GameObject other){
 
     }
 

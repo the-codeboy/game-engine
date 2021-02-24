@@ -1,12 +1,13 @@
 package ml.codeboy.engine.exampleGames.shooter.GameObjects;
 
+import ml.codeboy.engine.Damageable;
 import ml.codeboy.engine.Game;
 import ml.codeboy.engine.events.DestroyEvent;
 import ml.codeboy.engine.exampleGames.shooter.Shooter;
 
 import java.awt.*;
 
-public class Enemy extends Damageable{
+public class Enemy extends Damageable {
     public static int count=0,killed=0;
 
     public Enemy(Game game) {
