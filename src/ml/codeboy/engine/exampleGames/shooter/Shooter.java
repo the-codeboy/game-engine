@@ -112,6 +112,7 @@ public class Shooter extends Game {
         button.setSize(30);
 
         unPause();
+        setInitialised();
     }
 
     private void initUpgrades() {

@@ -16,4 +16,9 @@ public class CreeperSweeper extends Game {
     public void loose() {
 
     }
+
+    @Override
+    protected void initialise() {
+
+    }
 }

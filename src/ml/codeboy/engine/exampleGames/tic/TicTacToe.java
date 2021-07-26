@@ -14,11 +14,11 @@ public class TicTacToe extends Game {
 
     @Override
     protected void initialise() {
-        super.initialise();
         field=new Field();
         Button button=new Button("restart",this::restartGame);
         button.setPosition( (int) (getWidth()*0.9),getMiddleOfWindow().y);
         button.setWidthAndHeight((int)(getWidth()*0.2),(int)(getHeight()*0.1));
+        setInitialised();
     }
 
     private void restartGame(){

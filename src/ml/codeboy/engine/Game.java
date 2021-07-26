@@ -51,6 +51,8 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     private boolean isPaused = false;
     private boolean isGameOver = false;
 
+    private boolean initialised;
+
     /**
      * @param name the name of the new Game
      */
@@ -288,7 +290,12 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         camera = new Camera(this);
         camera.setLayer(Layer.INVISIBLE);
         scene = new Scene(this);
+        initialised = false;
         initialise();
+        if (!initialised) {
+            getFrame().dispose();
+            throw new IllegalStateException("Game not initialised");
+        }
         Thread gameThread = new Thread(this::startGameLoop);
         gameThread.start();
     }
@@ -332,10 +339,22 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     }
 
     /**
-     * will get called when the Game is initialised right before the gameLoop gets started (before the first game tick)
-     * override this on your Game to do initialisation
+     * Will get called when the Game is initialised right before the gameLoop gets started (before the first game tick)
+     *  You have to implement this in your Game for initialization and after the initialization is done call {@link Game#setInitialised()},
+     *  otherwise the Game will crash.
      */
-    protected void initialise() {
+    abstract protected void initialise();
+
+    /**
+     *  Call this function inside {@link Game#initialise()}.
+     * @throws IllegalStateException when Game is already initialised.
+     */
+    protected void setInitialised() {
+        if (initialised) {
+            getFrame().dispose();
+            throw new IllegalStateException("Already initialised");
+        }
+        initialised = true;
     }
 
     /**

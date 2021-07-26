@@ -20,12 +20,15 @@ public class TitleScreen extends Game {
 
     @Override
     protected void initialise() {
-        super.initialise();
         group = new ButtonGroup(getWidth() / 2, (int) (getHeight() * 0.7), getWidth() / 4, getHeight() / 2, group);
         addTitle();
+        setInitialised();
     }
 
     protected void addButton(String text, Runnable onClick) {
+        if(group==null){
+            throw new IllegalStateException("TitleScreen not fully initialised yet please don't add buttons in constructor, and call super.initialise() in initialise method.");
+        }
         group.addButton(text, onClick);
     }
 

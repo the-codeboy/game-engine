@@ -13,11 +13,6 @@ public class Rpg extends Game {
 
     public Rpg() {
         super("Rpg");
-        player = new Player(this);
-        player.setPosition(getMiddleOfWindow());
-        NPC npc=new NPC("max.png",this);
-        new Item(new ItemStack(ItemStack.Material.SWORD,this)).setPosition(100,50);
-        new Item(new ItemStack(ItemStack.Material.SWORD,this)).setPosition(100,500);
     }
 
     public void openInteraction(Interaction interaction) {
@@ -30,6 +25,16 @@ public class Rpg extends Game {
 
     public void closeDialog() {
         interaction = null;
+    }
+
+    @Override
+    protected void initialise() {
+        player = new Player(this);
+        player.setPosition(getMiddleOfWindow());
+        NPC npc=new NPC("max.png",this);
+        new Item(new ItemStack(ItemStack.Material.SWORD,this)).setPosition(100,50);
+        new Item(new ItemStack(ItemStack.Material.SWORD,this)).setPosition(100,500);
+        setInitialised();
     }
 
     @Override
