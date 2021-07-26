@@ -268,7 +268,11 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         } else {
             getFrame().setSize(preferredX, preferredY);
         }
-        screen = new BufferedImage(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, 1);
+        if (getFrame().getWidth() > 0 && getFrame().getHeight() > 0) {
+            screen = new BufferedImage(getFrame().getWidth(), getFrame().getHeight(), 1);
+        } else {
+            screen = new BufferedImage(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, 1);
+        }
         getFrame().setLocationRelativeTo(null);
         //panel=new JPanel(){
         //    @Override
@@ -280,7 +284,6 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         //getFrame().removeAll();
         //getFrame().add(panel);
         getFrame().setVisible(true);
-
 
         graphics = screen.createGraphics();
         camera = new Camera(this);
