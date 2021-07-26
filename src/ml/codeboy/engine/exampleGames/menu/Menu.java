@@ -11,6 +11,11 @@ public class Menu extends TitleScreen {
     public Menu() {
         super("Example Games");
         title.setTheme(UITheme.PLAIN_TEXT);
+    }
+
+    @Override
+    protected void initialise() {
+        super.initialise();
         addButton("Shooter", this::launchShooter);
         addButton("RPG", () -> launchGame(Rpg.class));
         addButton("Examples", () -> launchGame(Examples.class));
