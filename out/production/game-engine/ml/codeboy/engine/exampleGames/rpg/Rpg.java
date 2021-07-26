@@ -9,26 +9,27 @@ import ml.codeboy.engine.exampleGames.rpg.Items.ItemStack;
 
 public class Rpg extends Game {
     public Player player;
-    private Interaction interaction =null;
+    private Interaction interaction = null;
+
     public Rpg() {
         super("Rpg");
-        player=new Player(this);
+        player = new Player(this);
         player.setPosition(getMiddleOfWindow());
         NPC npc=new NPC("max.png",this);
         new Item(new ItemStack(ItemStack.Material.SWORD,this)).setPosition(100,50);
         new Item(new ItemStack(ItemStack.Material.SWORD,this)).setPosition(100,500);
     }
 
-    public void openInteraction(Interaction interaction){
-        interaction=interaction.clone();
-        if(this.interaction !=null)
+    public void openInteraction(Interaction interaction) {
+        interaction = interaction.clone();
+        if (this.interaction != null)
             return;
-        this.interaction =interaction;
+        this.interaction = interaction;
         interaction.open(this);
     }
 
-    public void closeDialog(){
-        interaction =null;
+    public void closeDialog() {
+        interaction = null;
     }
 
     @Override

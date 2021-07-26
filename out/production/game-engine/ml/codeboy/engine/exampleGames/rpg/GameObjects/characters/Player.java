@@ -12,8 +12,10 @@ import java.awt.event.KeyEvent;
 
 public class Player extends Character {
 
+    int speed = 100;
+
     public Player(Game game) {
-        super("max.png",game);
+        super("max.png", game);
         setSize(64);
         setLayer(Layer.MIDDLE);
         setAnimator(PlayerAnimator.getInstance());
@@ -22,37 +24,28 @@ public class Player extends Character {
 
     @Override
     protected void onCollision(GameObject other) {
-        if(other instanceof Item)
+        if (other instanceof Item)
             ((Item) other).collect(getInventory());
-        System.out.println("other");
     }
 
-    public Rpg getGame(){
+    public Rpg getGame() {
         return (Rpg) game;
     }
 
-    int speed=100;
-
     @Override
     protected void tick() {
-        addX(Input.horizontal()*speed*deltaTime);
-        addY(Input.vertical()*speed*deltaTime);
-        if(Input.horizontal()!=0||Input.vertical()!=0)
+        addX(Input.horizontal() * speed * deltaTime);
+        addY(Input.vertical() * speed * deltaTime);
+        if (Input.horizontal() != 0 || Input.vertical() != 0)
             setState(State.WALK);
         else setState(State.IDLE);
-
-        if(Input.isKeyDown(KeyEvent.VK_R))
-            rotate(deltaTime*100);
-
-        if(Input.startedKeyDown(KeyEvent.VK_E))
-            if(getInventory().isOpened())
-                getInventory().close();
-            else getInventory().open(getGame());
+        if (Input.isKeyDown(KeyEvent.VK_R))
+            rotate(deltaTime * 100);
     }
 
     @Override
     protected void lateTick() {
         super.lateTick();
-        game.getCamera().setPosition(getX()-(game.getWidth()/2),getY()-(game.getHeight()/2));
+        game.getCamera().setPosition(getX() - (game.getWidth() / 2), getY() - (game.getHeight() / 2));
     }
 }

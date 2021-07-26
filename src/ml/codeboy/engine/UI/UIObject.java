@@ -6,6 +6,7 @@ import ml.codeboy.engine.Layer;
 import ml.codeboy.engine.Sprite;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class UIObject extends Sprite {
     protected boolean hasBorder, rounded;
     protected int borderSize;
     protected float fontSize = 11;
-    protected List<String> lines;
+    protected List<String> lines= new ArrayList<>();
     UITheme theme = UITheme.DEFAULT;
     float borderpercentage = 0.95f;
     private boolean animated = false;

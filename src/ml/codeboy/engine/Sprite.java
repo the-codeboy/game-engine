@@ -336,6 +336,9 @@ public class Sprite {
         this.x = x;
         setChanged();
     }
+    public int getLeftX() {
+        return getX()-getWidth()/2;
+    }
 
     public int getXOnScreen() {
         return (int) getXOnScreenDouble();
@@ -350,6 +353,10 @@ public class Sprite {
      */
     public double getXDouble() {
         return x != -1 || image == null ? x : image.getWidth();
+    }
+
+    public int getTopY() {
+        return getY()-getHeight()/2;
     }
 
     /**
