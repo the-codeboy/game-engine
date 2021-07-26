@@ -4,31 +4,30 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class CharacterAnimator {
-    
-    public CharacterAnimator(){
-        
+
+    private static final Animation none = new Animation("error.png");
+    private final HashMap<CharacterState, Animation> animations = new HashMap<>();
+    private final HashMap<State, Animation> generalAnimations = new HashMap<>();
+
+    public CharacterAnimator() {
+
     }
 
-    public void addAnimation(Animation animation,State state){
-        generalAnimations.put(state,animation);
+    public void addAnimation(Animation animation, State state) {
+        generalAnimations.put(state, animation);
     }
 
-    public void addAnimation(Animation animation,State state,Direction direction){
-        animations.put(new CharacterState(state, direction),animation);
-        if(!generalAnimations.containsKey(state))
-            generalAnimations.put(state,animation);
+    public void addAnimation(Animation animation, State state, Direction direction) {
+        animations.put(new CharacterState(state, direction), animation);
+        if (!generalAnimations.containsKey(state))
+            generalAnimations.put(state, animation);
     }
 
-    private final HashMap<CharacterState,Animation>animations=new HashMap<>();
-    private final HashMap<State,Animation> generalAnimations =new HashMap<>();
-
-    private static final Animation none=new Animation("error.png");
-
-    public Animation getAnimation(State state,Direction direction){
-        return animations.getOrDefault(new CharacterState(state, direction), generalAnimations.getOrDefault(state,none)).clone();
+    public Animation getAnimation(State state, Direction direction) {
+        return animations.getOrDefault(new CharacterState(state, direction), generalAnimations.getOrDefault(state, none)).clone();
     }
 
-    private static class CharacterState{
+    private static class CharacterState {
         State state;
         Direction direction;
 

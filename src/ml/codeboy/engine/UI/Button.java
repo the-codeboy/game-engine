@@ -1,12 +1,13 @@
 package ml.codeboy.engine.UI;
 
-public class Button extends UIObject{
+public class Button extends UIObject {
     Runnable runnable;
-    public Button(String text,Runnable onClick) {
+
+    public Button(String text, Runnable onClick) {
         super();
         setAnimated(true);
         setText(text);
-        runnable=onClick;
+        runnable = onClick;
         setInteractable(true);
     }
 

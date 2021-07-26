@@ -2,29 +2,28 @@ package ml.codeboy.engine;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Sprites {
-    private static Sprites sprites_instance=new Sprites();
-    public static final BufferedImage error=getSprite("error.png");
-    public Sprites(){
-        sprites_instance=this;
+    private static Sprites sprites_instance = new Sprites();
+    public static final BufferedImage error = getSprite("error.png");
+    private final HashMap<String, BufferedImage> loadedSprites = new HashMap<>();
+
+    public Sprites() {
+        sprites_instance = this;
     }
-    public static BufferedImage getSprite(String path){
+
+    public static BufferedImage getSprite(String path) {
         return sprites_instance.find(path);
     }
-    private HashMap<String,BufferedImage> loadedSprites=new HashMap<>();
 
-    public BufferedImage find(String path){
-        if(loadedSprites.containsKey(path))
+    public BufferedImage find(String path) {
+        if (loadedSprites.containsKey(path))
             return loadedSprites.get(path);
         return read(path);
     }
 
-    public BufferedImage read(String path){
+    public BufferedImage read(String path) {
         BufferedImage img;
         try {
 //            System.out.println("Sprites/" + path+" : "+Sprites.class.getClassLoader().getResource(""));
@@ -34,7 +33,7 @@ public class Sprites {
             System.out.println("can´t find " + path + " !!!");
             return null;
         }
-        loadedSprites.put(path,img);
+        loadedSprites.put(path, img);
         return img;
     }
 }

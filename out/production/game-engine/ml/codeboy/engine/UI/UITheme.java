@@ -5,17 +5,18 @@ import java.util.ArrayList;
 
 public class UITheme {
 
-    public static UITheme DEFAULT =new UITheme(Color.DARK_GRAY,Color.LIGHT_GRAY,Color.BLACK,false,5,true),
-            CRAZY=new UITheme(Color.YELLOW,Color.ORANGE,true),
-    PLAIN_TEXT=new UITheme(new Color(0,0,0,0),Color.GRAY,false);
+    public static UITheme DEFAULT = new UITheme(Color.DARK_GRAY, Color.LIGHT_GRAY, Color.BLACK, false, 5, true),
+            CRAZY = new UITheme(Color.YELLOW, Color.ORANGE, true),
+            PLAIN_TEXT = new UITheme(new Color(0, 0, 0, 0), Color.GRAY, false);
 
-    private final Color background,foreground,textColor;
+    private final Color background, foreground, textColor;
     private final int borderSize;
     private final boolean hasBorder;
 
     private final boolean rounded;
+    private final ArrayList<UIObject> objects = new ArrayList<>();
 
-    public UITheme(Color background, Color foreground, Color textColor,boolean rounded, int borderSize, boolean hasBorder) {
+    public UITheme(Color background, Color foreground, Color textColor, boolean rounded, int borderSize, boolean hasBorder) {
         this.background = background;
         this.foreground = foreground;
         this.textColor = textColor;
@@ -24,8 +25,8 @@ public class UITheme {
         this.hasBorder = hasBorder;
     }
 
-    public UITheme(Color foreground, Color textColor,boolean rounded) {
-        this(Color.BLACK,foreground,textColor,rounded,0,false);
+    public UITheme(Color foreground, Color textColor, boolean rounded) {
+        this(Color.BLACK, foreground, textColor, rounded, 0, false);
     }
 
     public Color getBackground() {
@@ -52,13 +53,11 @@ public class UITheme {
         return hasBorder;
     }
 
-    private ArrayList<UIObject>objects=new ArrayList<>();
-
-    public void add(UIObject object){
+    public void add(UIObject object) {
         objects.add(object);
     }
 
-    public void remove(UIObject object){
+    public void remove(UIObject object) {
         objects.remove(object);
     }
 }

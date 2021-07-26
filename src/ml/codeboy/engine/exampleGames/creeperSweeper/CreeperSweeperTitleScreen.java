@@ -5,6 +5,6 @@ import ml.codeboy.engine.TitleScreen;
 public class CreeperSweeperTitleScreen extends TitleScreen {
     public CreeperSweeperTitleScreen() {
         super("CreeperSweeper");
-        addButton("PLAY",()->launchGame(CreeperSweeper.class));
+        addButton("PLAY", () -> launchGame(CreeperSweeper.class));
     }
 }

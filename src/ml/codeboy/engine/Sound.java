@@ -1,21 +1,15 @@
 package ml.codeboy.engine;
 
-import sun.audio.AudioData;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
-import sun.audio.ContinuousAudioDataStream;
-
-import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import java.io.FileInputStream;
 
 public class Sound {
     public static synchronized void play(final String url) {
-        play(url,false);
+        play(url, false);
     }
-    public static synchronized void play(final String url,boolean loop) {
+
+    public static synchronized void play(final String url, boolean loop) {
         new Thread(new Runnable() {
             public void run() {
                 try {

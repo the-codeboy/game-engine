@@ -2,14 +2,14 @@ package ml.codeboy.engine.exampleGames.rpg.Dialogs;
 
 public class DialogScreen {
 
-    private final DialogOption[]options;
-    private String text="";
+    private final DialogOption[] options;
+    private String text = "";
 
     private DialogScreen next;
 
-    public DialogScreen(String text,DialogOption... options) {
+    public DialogScreen(String text, DialogOption... options) {
         this.options = options;
-        this.text=text;
+        this.text = text;
     }
 
     public DialogOption[] getOptions() {
@@ -20,8 +20,8 @@ public class DialogScreen {
         return text;
     }
 
-    public void openNext(Dialog dialog){
-        if(next==null)
+    public void openNext(Dialog dialog) {
+        if (next == null)
             System.err.println("tried opening next dialog screen but there are no more");
         else dialog.setScreen(next);
     }

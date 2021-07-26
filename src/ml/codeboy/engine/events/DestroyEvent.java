@@ -2,10 +2,10 @@ package ml.codeboy.engine.events;
 
 import ml.codeboy.engine.Sprite;
 
-public class DestroyEvent extends Event implements Cancelable{
+public class DestroyEvent extends Event implements Cancelable {
 
-    private boolean canceled=false;
     private final Sprite sprite;
+    private boolean canceled = false;
 
     public DestroyEvent(Sprite sprite) {
         this.sprite = sprite;
@@ -22,6 +22,6 @@ public class DestroyEvent extends Event implements Cancelable{
 
     @Override
     public void setCanceled(boolean canceled) {
-        this.canceled=canceled;
+        this.canceled = canceled;
     }
 }

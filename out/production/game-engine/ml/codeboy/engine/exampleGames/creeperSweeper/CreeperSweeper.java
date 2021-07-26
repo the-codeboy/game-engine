@@ -7,13 +7,13 @@ public class CreeperSweeper extends Game {
         super("CreeperSweeper");
     }
 
-    public static CreeperSweeper getInstance(){
-        if(get()instanceof CreeperSweeper)
-        return (CreeperSweeper) get();
+    public static CreeperSweeper getInstance() {
+        if (get() instanceof CreeperSweeper)
+            return (CreeperSweeper) get();
         return null;
     }
 
-    public void loose(){
+    public void loose() {
 
     }
 }

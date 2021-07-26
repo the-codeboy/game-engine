@@ -2,7 +2,7 @@ package ml.codeboy.engine.exampleGames.shooter.upgrades;
 
 import ml.codeboy.engine.Game;
 
-public class MaxAmmo extends Upgrade{
+public class MaxAmmo extends Upgrade {
     public MaxAmmo(Game game) {
         super(1, "Ammo", game);
     }

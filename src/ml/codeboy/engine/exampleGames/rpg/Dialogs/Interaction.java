@@ -4,18 +4,18 @@ import ml.codeboy.engine.exampleGames.rpg.Rpg;
 
 public class Interaction {
 
-    protected boolean active=false;
+    protected boolean active = false;
 
     protected Rpg rpg;
 
 
-    public void open(Rpg rpg){
-        this.rpg=rpg;
-        active=true;
+    public void open(Rpg rpg) {
+        this.rpg = rpg;
+        active = true;
     }
 
     public void close() {
-        active=false;
+        active = false;
         rpg.closeDialog();
     }
 
@@ -23,7 +23,7 @@ public class Interaction {
         return active;
     }
 
-    public Interaction clone(){
+    public Interaction clone() {
         return this;
     }
 }

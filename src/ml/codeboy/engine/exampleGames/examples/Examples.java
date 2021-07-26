@@ -6,6 +6,6 @@ import ml.codeboy.engine.TitleScreen;
 public class Examples extends TitleScreen {
     public Examples() {
         super("Examples");
-        addButton("Play Sound", ()->Sound.play("Epic_Journey.wav"));
+        addButton("Play Sound", () -> Sound.play("Epic_Journey.wav"));
     }
 }
