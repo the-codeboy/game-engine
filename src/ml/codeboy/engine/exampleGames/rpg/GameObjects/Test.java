@@ -7,13 +7,13 @@ import java.awt.*;
 
 public class Test extends GameObject {
     public Test(Game game) {
-        super(game,SpriteType.Rectangle);
+        super(game, SpriteType.Rectangle);
         setCollision(true);
         setSize(1);
     }
 
-    public void setActive(boolean active){
-        setColor(active?Color.green:Color.red);
+    public void setActive(boolean active) {
+        setColor(active ? Color.green : Color.red);
     }
 
 

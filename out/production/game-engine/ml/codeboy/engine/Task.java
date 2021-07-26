@@ -1,49 +1,48 @@
 package ml.codeboy.engine;
 
-public abstract class Task{
+public abstract class Task {
 
-    protected abstract void run();
-    protected double period=1;
-    double timeSinceLast=0;
-    boolean runOnce=false;
-    boolean useRealTime=false;
-
-    boolean isCanceled=false,
-    started=false;
+    protected double period = 1;
+    double timeSinceLast = 0;
+    boolean runOnce = false;
+    boolean useRealTime = false;
+    boolean isCanceled = false,
+            started = false;
+    TaskScheduler scheduler;
 
     public Task(TaskScheduler scheduler) {
         this.scheduler = scheduler;
         onCreation();
     }
 
+    protected abstract void run();
+
     protected void onCreation() {
 
     }
-
-    TaskScheduler scheduler;
 
     public boolean isCanceled() {
         return isCanceled;
     }
 
-    void tick(){
-        timeSinceLast+=Game.deltaTime(useRealTime);
-        while(!isCanceled&&timeSinceLast>period){
-            timeSinceLast-=period;
+    void tick() {
+        timeSinceLast += Game.deltaTime(useRealTime);
+        while (!isCanceled && timeSinceLast > period) {
+            timeSinceLast -= period;
             run();
-            if(runOnce||period==0)
+            if (runOnce || period == 0)
                 cancel();
         }
     }
 
-    public void cancel(){
-        isCanceled=true;
+    public void cancel() {
+        isCanceled = true;
     }
 
-    protected void start(){
-        if(!started&&!isCanceled)
-        scheduler.scheduleTask(this);
-        started=true;
+    protected void start() {
+        if (!started && !isCanceled)
+            scheduler.scheduleTask(this);
+        started = true;
     }
 
 }

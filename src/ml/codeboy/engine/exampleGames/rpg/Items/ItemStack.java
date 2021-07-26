@@ -4,28 +4,11 @@ import ml.codeboy.engine.Game;
 
 public class ItemStack {
 
-    public enum Material{
-        SWORD("sword.png");
-
-        public final String sprite;
-        public final int maxStack;
-
-        Material(String sprite) {
-            this(sprite,64);
-        }
-
-        Material(String sprite,int maxStack) {
-            this.sprite=sprite;
-            this.maxStack=maxStack;
-        }
-    }
-
+    private final Game game;
     private Material type;
-    private Game game;
     private int count;
-
     public ItemStack(Material type, Game game) {
-        this(type,game,1);
+        this(type, game, 1);
     }
 
     public ItemStack(Material type, Game game, int count) {
@@ -64,6 +47,22 @@ public class ItemStack {
 
     public Game getGame() {
         return game;
+    }
+
+    public enum Material {
+        SWORD("sword.png");
+
+        public final String sprite;
+        public final int maxStack;
+
+        Material(String sprite) {
+            this(sprite, 64);
+        }
+
+        Material(String sprite, int maxStack) {
+            this.sprite = sprite;
+            this.maxStack = maxStack;
+        }
     }
 }
 

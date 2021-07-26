@@ -6,21 +6,21 @@ import ml.codeboy.engine.exampleGames.rpg.Items.ItemStack;
 
 public class Item extends GameObject {
 
-    private ItemStack itemStack;
+    private final ItemStack itemStack;
 
     public Item(ItemStack stack) {
-        super(stack.getType().sprite,stack.getGame());
+        super(stack.getType().sprite, stack.getGame());
         setSize(10);
-        itemStack=stack;
+        itemStack = stack;
     }
 
     public ItemStack getItemStack() {
         return itemStack;
     }
 
-    public void collect(Inventory inventory){
-        boolean fits=inventory.addItem(getItemStack());
-        if(fits)
+    public void collect(Inventory inventory) {
+        boolean fits = inventory.addItem(getItemStack());
+        if (fits)
             deleteNextTick();
     }
 }

@@ -7,24 +7,25 @@ import ml.codeboy.engine.exampleGames.rpg.GameObjects.characters.Player;
 
 public class Rpg extends Game {
     public Player player;
-    private Interaction interaction =null;
+    private Interaction interaction = null;
+
     public Rpg() {
         super("Rpg");
-        player=new Player(this);
+        player = new Player(this);
         player.setPosition(getMiddleOfWindow());
-        NPC npc=new NPC("max.png",this);
+        NPC npc = new NPC("max.png", this);
     }
 
-    public void openInteraction(Interaction interaction){
-        interaction=interaction.clone();
-        if(this.interaction !=null)
+    public void openInteraction(Interaction interaction) {
+        interaction = interaction.clone();
+        if (this.interaction != null)
             return;
-        this.interaction =interaction;
+        this.interaction = interaction;
         interaction.open(this);
     }
 
-    public void closeDialog(){
-        interaction =null;
+    public void closeDialog() {
+        interaction = null;
     }
 
     @Override

@@ -2,7 +2,7 @@ package ml.codeboy.engine.exampleGames.shooter.upgrades;
 
 import ml.codeboy.engine.Game;
 
-public class BulletSpeed extends Upgrade{
+public class BulletSpeed extends Upgrade {
     public BulletSpeed(Game game) {
         super(5, "BulletSpeed", game);
     }

@@ -6,15 +6,16 @@ import ml.codeboy.engine.GameObject;
 import ml.codeboy.engine.events.DestroyEvent;
 
 public class Bullet extends Damageable {
-    double dirX,dirY;
-    double speed=20;
-    public static int count=0;
-    public Bullet(Game game,double dirX,double dirY) {
-        super(game,SpriteType.Circle);
-        game.getScheduler().scheduleTask(this::destroy,3);
+    public static int count = 0;
+    double dirX, dirY;
+    double speed = 20;
+
+    public Bullet(Game game, double dirX, double dirY) {
+        super(game, SpriteType.Circle);
+        game.getScheduler().scheduleTask(this::destroy, 3);
         setSize(5);
-        this.dirX=dirX;
-        this.dirY=dirY;
+        this.dirX = dirX;
+        this.dirY = dirY;
         listenForCollision(Enemy.class);
         count++;
     }
@@ -26,7 +27,7 @@ public class Bullet extends Damageable {
 
     @Override
     protected void onCollision(GameObject other) {
-        if(other instanceof Enemy){
+        if (other instanceof Enemy) {
             ((Enemy) other).attack(this);
             attack(other);
         }
@@ -34,10 +35,9 @@ public class Bullet extends Damageable {
 
     @Override
     protected void tick() {
-        addX(dirX*(deltaTime*speed));
-        addY(dirY*(deltaTime*speed));
+        addX(dirX * (deltaTime * speed));
+        addY(dirY * (deltaTime * speed));
     }
-
 
 
 //    @Override

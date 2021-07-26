@@ -15,36 +15,36 @@ import java.util.Collections;
 
 public class NPC extends Character {
 
-    private Dialog dialog;
+    private final Dialog dialog;
 
     public NPC(String name, Game game) {
         super(name, game);
         listenForCollision(Player.class);
-        this.dialog=createDialog();
+        this.dialog = createDialog();
         addAnimation(new Animation(Collections.singletonList(Sprites.getSprite(name))), State.IDLE);
     }
 
     @Override
     protected void onCollision(GameObject other) {
-        if(other instanceof Player)
+        if (other instanceof Player)
             openDialog((Player) other);
     }
 
-    protected Dialog createDialog(){
+    protected Dialog createDialog() {
         return new Dialog(new DialogScreen("Hi I am Jonny the trader",
-                new DialogOption("...",DialogOption.nextScreen)
-                ,new DialogOption("quit",DialogOption.quit)),
+                new DialogOption("...", DialogOption.nextScreen)
+                , new DialogOption("quit", DialogOption.quit)),
                 new DialogScreen("Do you want to buy something?",
-                        new DialogOption("yes",DialogOption.nextScreen),
-                        new DialogOption("no",d->d.setScreen(
-                                new DialogScreen("Well too bad",new DialogOption("quit",DialogOption.quit)))),
-                        new DialogOption("quit",DialogOption.quit)),
+                        new DialogOption("yes", DialogOption.nextScreen),
+                        new DialogOption("no", d -> d.setScreen(
+                                new DialogScreen("Well too bad", new DialogOption("quit", DialogOption.quit)))),
+                        new DialogOption("quit", DialogOption.quit)),
                 new DialogScreen("This is just a test I can´t really sell you anything",
-                        new DialogOption("quit",Dialog::close)));
+                        new DialogOption("quit", Dialog::close)));
     }
 
-    public void openDialog(Player player){
-        if(dialog!=null)
+    public void openDialog(Player player) {
+        if (dialog != null)
             player.getGame().openInteraction(dialog);
     }
 }

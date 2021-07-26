@@ -3,6 +3,9 @@ package ml.codeboy.engine;
 public class Damageable extends GameObject {
 
 
+    private int dmg = 1;
+    private int lives = 1;
+
     //<editor-fold desc="constructors">
     public Damageable(Game game) {
         super(game);
@@ -27,6 +30,8 @@ public class Damageable extends GameObject {
     public Damageable(String name, String path, int x, int y, Game game) {
         super(name, path, x, y, game);
     }
+    //</editor-fold>
+
 
     public Damageable(String name, int x, int y, int width, int height, Game game) {
         super(name, x, y, width, height, game);
@@ -35,8 +40,6 @@ public class Damageable extends GameObject {
     public Damageable(String name, String path, int x, int y, int width, int height, Game game) {
         super(name, path, x, y, width, height, game);
     }
-    //</editor-fold>
-
 
     @Override
     protected void init(Game game) {
@@ -52,15 +55,11 @@ public class Damageable extends GameObject {
         this.dmg = dmg;
     }
 
-    private int dmg=1;
-
-    public void attack(GameObject other){
-        if(other instanceof Damageable){
+    public void attack(GameObject other) {
+        if (other instanceof Damageable) {
             ((Damageable) other).addLives(-getDmg());
         }
     }
-
-
 
     public int getLives() {
         return lives;
@@ -72,13 +71,11 @@ public class Damageable extends GameObject {
 
     public void addLives(int lives) {
         this.lives += lives;
-        if(this.lives<=0)
+        if (this.lives <= 0)
             onDeath();
     }
 
-    protected void onDeath(){
+    protected void onDeath() {
         destroy();
     }
-
-    private int lives=1;
 }
