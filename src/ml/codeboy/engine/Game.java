@@ -11,13 +11,18 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ConcurrentModificationException;
 
-public abstract class Game implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener{
+public abstract class Game implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener, ComponentListener {
 
     private static Game instance;
 
     private static final JFrame frame=new JFrame();
     private BufferedImage screen;
     private int preferredX=1000,preferredY=1000;
+
+    public void componentResized(ComponentEvent ce) {
+        screen = new BufferedImage(getFrame().getWidth(), getFrame().getHeight(), 1);
+        graphics = screen.createGraphics();
+    }
 
     static {
         frame.addKeyListener(Input.getInstance());
@@ -183,10 +188,26 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         init();
     }
 
+    @Override
+    public void componentMoved(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
+
+    }
+
     /**
      * creates the window for the Game and initialises listeners - also starts the gameLoop
      */
-    private void init(){
+    private void init() {
+        frame.getContentPane().addComponentListener(this);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         if(fullScreen) {
             if(!getFrame().isDisplayable())
