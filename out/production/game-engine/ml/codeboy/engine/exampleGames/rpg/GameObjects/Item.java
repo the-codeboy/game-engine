@@ -21,6 +21,6 @@ public class Item extends GameObject {
     public void collect(Inventory inventory){
         boolean fits=inventory.addItem(getItemStack());
         if(fits)
-            deleteNextTick();
+            destroy();
     }
 }

@@ -19,6 +19,10 @@ public class Interaction {
         rpg.closeDialog();
     }
 
+    public boolean isOpened(){
+        return active;
+    }
+
     public Interaction clone(){
         return this;
     }

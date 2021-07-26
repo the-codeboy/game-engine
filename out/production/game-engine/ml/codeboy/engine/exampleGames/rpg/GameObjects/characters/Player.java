@@ -24,6 +24,7 @@ public class Player extends Character {
     protected void onCollision(GameObject other) {
         if(other instanceof Item)
             ((Item) other).collect(getInventory());
+        System.out.println("other");
     }
 
     public Rpg getGame(){
@@ -39,8 +40,14 @@ public class Player extends Character {
         if(Input.horizontal()!=0||Input.vertical()!=0)
             setState(State.WALK);
         else setState(State.IDLE);
+
         if(Input.isKeyDown(KeyEvent.VK_R))
             rotate(deltaTime*100);
+
+        if(Input.startedKeyDown(KeyEvent.VK_E))
+            if(getInventory().isOpened())
+                getInventory().close();
+            else getInventory().open(getGame());
     }
 
     @Override

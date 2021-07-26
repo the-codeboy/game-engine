@@ -2,8 +2,10 @@ package ml.codeboy.engine.exampleGames.rpg;
 
 import ml.codeboy.engine.Game;
 import ml.codeboy.engine.exampleGames.rpg.Dialogs.Interaction;
+import ml.codeboy.engine.exampleGames.rpg.GameObjects.Item;
 import ml.codeboy.engine.exampleGames.rpg.GameObjects.NPC;
 import ml.codeboy.engine.exampleGames.rpg.GameObjects.characters.Player;
+import ml.codeboy.engine.exampleGames.rpg.Items.ItemStack;
 
 public class Rpg extends Game {
     public Player player;
@@ -13,6 +15,8 @@ public class Rpg extends Game {
         player=new Player(this);
         player.setPosition(getMiddleOfWindow());
         NPC npc=new NPC("max.png",this);
+        new Item(new ItemStack(ItemStack.Material.SWORD,this)).setPosition(100,50);
+        new Item(new ItemStack(ItemStack.Material.SWORD,this)).setPosition(100,500);
     }
 
     public void openInteraction(Interaction interaction){

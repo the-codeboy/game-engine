@@ -30,7 +30,7 @@ public class Sprites {
 //            System.out.println("Sprites/" + path+" : "+Sprites.class.getClassLoader().getResource(""));
             img = ImageIO.read(getClass().getClassLoader().getResource("Sprites/" + path));
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             System.out.println("can´t find " + path + " !!!");
             return null;
         }

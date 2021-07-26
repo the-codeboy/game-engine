@@ -33,7 +33,7 @@ public class UIObject extends Sprite {
 
     private String text="";
     protected float fontSize=11;
-    protected List<String> lines;
+    protected List<String> lines=Collections.emptyList();
 
     public UIObject() {
         this(Game.get().getTheme());

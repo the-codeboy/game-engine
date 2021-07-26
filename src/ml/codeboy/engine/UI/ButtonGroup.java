@@ -78,6 +78,19 @@ public class ButtonGroup extends UIObject{
         setWidthAndHeight(width, height);
     }
 
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        for (Button b:
+             getButtons()) {
+            b.setVisible(visible);
+        }
+    }
+
+    public ArrayList<Button> getButtons() {
+        return buttons;
+    }
+
     public ButtonGroup() {
         super();
     }

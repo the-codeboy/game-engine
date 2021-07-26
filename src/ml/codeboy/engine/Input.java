@@ -6,6 +6,7 @@ import ml.codeboy.engine.exampleGames.shooter.Shooter;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Input implements MouseListener, KeyListener, MouseWheelListener, MouseMotionListener {
@@ -19,6 +20,11 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
     }
 
     private final HashMap<Integer,Boolean> keys=new HashMap<>();
+    private final HashMap<Integer,Boolean> startKeys=new HashMap<>();
+
+    public void tick(){
+        startKeys.clear();
+    }
 
     public static Point getMousePosition(){
         //return MouseInfo.getPointerInfo().getLocation();
@@ -30,6 +36,10 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
 
     public static boolean isKeyDown(int keyCode){
         return getInstance().keys.getOrDefault(keyCode,false);
+    }
+
+    public static boolean startedKeyDown(int keyCode){
+        return getInstance().startKeys.getOrDefault(keyCode,false);
     }
 
     public static int getMouseX(){
@@ -65,7 +75,7 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
     }
 
     public static boolean isTouchingUI(){
-        for (Sprite sprite:Layer.UI.getSprites()){
+        for (Sprite sprite:(ArrayList<Sprite>)Layer.UI.getSprites().clone()){
             if(sprite instanceof UIObject){
                 if(sprite.isTouching(getMousePosition())){
                     return true;
@@ -122,7 +132,10 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
             if(Shooter.get()!=null)
                 Shooter.get().getPlayer().addCoins(1000);
         }
-        keys.put(e.getKeyCode(),true);
+        if(!isKeyDown(e.getKeyCode())) {
+            keys.put(e.getKeyCode(), true);
+            startKeys.put(e.getKeyCode(),true);
+        }
     }
 
     @Override

@@ -33,6 +33,7 @@ public class Sprite {
     private boolean isDestroyed=false;
     private boolean hasChanged=false;
     private double rotation =0;
+    private boolean visible=true;
 
     public boolean hasChanged() {
         return hasChanged;
@@ -79,6 +80,14 @@ public class Sprite {
      */
     public void setInteractable(boolean interactable) {
         this.interactable = interactable;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
     /**
@@ -338,6 +347,10 @@ public class Sprite {
         return (int)getXDouble();
     }
 
+    public int getLeftX() {
+        return getX()-getWidth()/2;
+    }
+
     public int getXOnScreen() {
         return (int) getXOnScreenDouble();
     }
@@ -373,6 +386,10 @@ public class Sprite {
      */
     public int getY() {
         return (int)getYDouble();
+    }
+
+    public int getTopY() {
+        return getY()-getHeight()/2;
     }
 
     /**
@@ -479,6 +496,8 @@ public class Sprite {
             g.setColor(Color.RED);
             g.drawRect(getXOnScreen() - getWidth() / 2, getYOnScreen() - getHeight() / 2, getWidth(), getHeight());
         }
+        if(!visible)
+            return;
         //if(getLayer()==Layer.UI||isOnScreen())
 
         switch (type){
@@ -534,5 +553,13 @@ public class Sprite {
      * @param g the Graphics2D object to render to
      */
     protected void customRender(Graphics2D g){}
+
+    /**
+     * @deprecated not implemented yet - do not use!!!
+     */
+    @Deprecated
+    protected void resize(){
+
+    }
 
 }

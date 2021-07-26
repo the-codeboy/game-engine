@@ -357,6 +357,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
             object.lateTick();
         }
         lateTick = System.currentTimeMillis()-tickStartTime-schedulerTime-earlyTick-internalTick-tick;
+        Input.getInstance().tick(); //can be ignored...doesn´t take much time
     }
 
     /**
