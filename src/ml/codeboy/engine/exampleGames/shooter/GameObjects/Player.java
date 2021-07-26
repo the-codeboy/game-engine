@@ -16,7 +16,7 @@ public class Player extends Damageable {
     int maxAmmo = 50;
     double ammo = maxAmmo;
     double cooldown, maxCooldown = 0.2;
-    private int coins = 10;
+    private int coins = 969696969;
     private double bulletSpeed = 10;
     private double reloadSpeed = 1;
     private int bulletSize = 4;

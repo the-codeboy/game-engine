@@ -37,7 +37,7 @@ public class Field extends UIObject {
             int y=i%3,x=(i-y)/3;
             TicButton button=buttons.get(i);
             button.setWidthAndHeight(getWidth()/3,getHeight()/3);
-            button.setPosition((int) (getLeftX()+(x+0.5)*button.getWidth()), (int) (getTopY()+(y+0.5)*button.getHeight()));
+            button.setPosition((int) (getX()-getWidth()/2+(x+0.5)*button.getWidth()), (int) (getY()-getHeight()/2+(y+0.5)*button.getHeight()));
         }
     }
 
