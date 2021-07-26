@@ -228,7 +228,6 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
      * @return the JFrame this Game is rendering to
      * might be removed in a future release but is still safe to use at the moment
      */
-    @Deprecated
     public JFrame getFrame() {
         return frame;
     }
@@ -335,10 +334,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     /**
      * will get called when the Game is initialised right before the gameLoop gets started (before the first game tick)
      * override this on your Game to do initialisation
-     *
-     * @deprecated might get removed because you can use your Game´s constructor for initialisation
      */
-    @Deprecated
     protected void initialise() {
     }
 

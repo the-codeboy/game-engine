@@ -16,17 +16,13 @@ public class TitleScreen extends Game {
 
     public TitleScreen(String name, UITheme theme) {
         super(name, theme);
-        addTitle();
-        render();
     }
 
-    public void componentResized(ComponentEvent ce) {
-        super.componentResized(ce);
-        render();
-    }
-
-    private void render() {
+    @Override
+    protected void initialise() {
+        super.initialise();
         group = new ButtonGroup(getWidth() / 2, (int) (getHeight() * 0.7), getWidth() / 4, getHeight() / 2, group);
+        addTitle();
     }
 
     protected void addButton(String text, Runnable onClick) {
