@@ -45,9 +45,9 @@ public class Sprite implements Comparable<Sprite> {
     private Layer layer = Layer.DEFAULT;
 
     /**
-     * Depth of the element lower values will preferred over bigger ones default value 50
+     * Depth of the element lower values will preferred over bigger ones default value 1024
      */
-    private int depth = 50;
+    private int depth = 1024;
 
     /**
      * @param type the type this Sprite has
@@ -447,8 +447,7 @@ public class Sprite implements Comparable<Sprite> {
     }
 
     /**
-     * Sets depth of the element lower values will preferred over bigger ones default value 50
-     *
+     * Sets depth of the element lower values will preferred over higher ones
      * @param depth any int value
      */
     public void setDepth(int depth) {

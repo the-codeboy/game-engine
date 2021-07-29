@@ -18,11 +18,11 @@ public class TicTacToe extends Game {
         resetButton = new Button("restart", this::restartGame);
         resetButton.setPosition((int) (getWidth() * 0.9), getMiddleOfWindow().y);
         resetButton.setWidthAndHeight((int) (getWidth() * 0.2), (int) (getHeight() * 0.1));
-        resetButton.setDepth(40);
+        resetButton.setDepth(0);
         resetButton = new Button("undo", this::undoMove);
         resetButton.setPosition((int) (getWidth() * 0.9), (int) (getMiddleOfWindow().y - getHeight() * 0.1));
         resetButton.setWidthAndHeight((int) (getWidth() * 0.2), (int) (getHeight() * 0.1));
-        resetButton.setDepth(40);
+        resetButton.setDepth(0);
         setInitialised();
     }
 
