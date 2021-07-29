@@ -9,6 +9,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -321,6 +322,7 @@ public class Sprite implements Comparable<Sprite> {
         getSpritesAt(this.layer).remove(this);
         this.layer = layer;
         getSpritesAt(layer).add(this);
+        Collections.sort(getSpritesAt(layer));
     }
 
     private void init() {
@@ -447,7 +449,7 @@ public class Sprite implements Comparable<Sprite> {
     /**
      * Sets depth of the element lower values will preferred over bigger ones default value 50
      *
-     * @param depth
+     * @param depth any int value
      */
     public void setDepth(int depth) {
         this.depth = depth;

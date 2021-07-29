@@ -9,6 +9,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
 public abstract class Game implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener, ComponentListener {
@@ -447,9 +448,9 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
             graphics.drawImage(backgroundImage, 0, 0, null);
         Layer currentLayer = Layer.BACKGROUND;
         while (currentLayer != null) {
-            for (Sprite sprite :
-                    currentLayer.getSprites()) {
-                sprite.render(graphics);
+            ArrayList<Sprite> list=currentLayer.getSprites();
+            for(int i=list.size()-1;i>=0;i--){
+                list.get(i).render(graphics);
             }
             currentLayer = currentLayer.getNext();
         }
