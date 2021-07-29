@@ -83,11 +83,12 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (isTouchingUI())
+        if (!isTouchingUI())
             return;
         if (e.getButton() == MouseEvent.BUTTON1) {
             mouseDown = true;
         }
+        buttonPress();
     }
 
     @Override
@@ -95,7 +96,6 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
         if (e.getButton() == MouseEvent.BUTTON1) {
             mouseDown = false;
         }
-        buttonPress();
     }
 
     @Override
