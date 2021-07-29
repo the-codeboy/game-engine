@@ -15,7 +15,7 @@ import java.util.HashMap;
  * represents a Sprite that gets drawn on the games window
  * sprites are one of the layers specified by the Layer enum
  */
-public class Sprite {
+public class Sprite implements Comparable<Sprite>{
 
     private static final HashMap<Layer, ArrayList<Sprite>> sprites = new HashMap<>();
 
@@ -42,6 +42,11 @@ public class Sprite {
     private boolean interactable = false;
     private Color color;
     private Layer layer = Layer.DEFAULT;
+
+    /**
+     * Depth of the element lower values will preferred over bigger ones default value 50
+     */
+    private int depth = 50;
 
     /**
      * @param type the type this Sprite has
@@ -336,8 +341,9 @@ public class Sprite {
         this.x = x;
         setChanged();
     }
+
     public int getLeftX() {
-        return getX()-getWidth()/2;
+        return getX() - getWidth() / 2;
     }
 
     public int getXOnScreen() {
@@ -356,7 +362,7 @@ public class Sprite {
     }
 
     public int getTopY() {
-        return getY()-getHeight()/2;
+        return getY() - getHeight() / 2;
     }
 
     /**
@@ -425,6 +431,23 @@ public class Sprite {
     public void setPosition(int x, int y) {
         setX(x);
         setY(y);
+    }
+
+
+    /**
+     * Gets element depth
+     * @return element depth
+     */
+    public int getDepth() {
+        return depth;
+    }
+
+    /**
+     * Sets depth of the element lower values will preferred over bigger ones default value 50
+     * @param depth
+     */
+    public void setDepth(int depth) {
+        this.depth = depth;
     }
 
     /**
@@ -534,6 +557,11 @@ public class Sprite {
      * @param g the Graphics2D object to render to
      */
     protected void customRender(Graphics2D g) {
+    }
+
+    @Override
+    public int compareTo(Sprite o) {
+        return Integer.compare(depth,o.depth);
     }
 
     /**

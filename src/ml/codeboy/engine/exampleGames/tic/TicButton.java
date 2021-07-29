@@ -8,7 +8,7 @@ public class TicButton extends Button {
     public TicButton(int x,int y,Field field) {
         super("", ()-> {
             System.out.println("clicked "+x+" "+y);
-            field.play(x,y,field.getCurrentPlayer());
+                field.play(x,y);
         });
         this.x=x;
         this.y=y;

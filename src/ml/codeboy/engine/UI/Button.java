@@ -9,6 +9,7 @@ public class Button extends UIObject {
         setText(text);
         runnable = onClick;
         setInteractable(true);
+        setDepth(49);
     }
 
     @Override

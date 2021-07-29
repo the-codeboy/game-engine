@@ -19,7 +19,7 @@ public class Menu extends TitleScreen {
         addButton("Shooter", this::launchShooter);
         addButton("RPG", () -> launchGame(Rpg.class));
         addButton("Examples", () -> launchGame(Examples.class));
-        addButton("tickTack broke",()->launchGame(TicTacToe.class));
+        addButton("Tic Tac Toe",()->launchGame(TicTacToe.class));
     }
 
     private void launchShooter() {

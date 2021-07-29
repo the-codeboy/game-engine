@@ -5,6 +5,9 @@ import ml.codeboy.engine.exampleGames.shooter.Shooter;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class Input implements MouseListener, KeyListener, MouseWheelListener, MouseMotionListener {
@@ -70,7 +73,9 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
 
     private void buttonPress() {
         Game.doNext(() -> {
-            for (Sprite sprite : Layer.UI.getSprites()) {
+            ArrayList<Sprite> list=new ArrayList<>(Layer.UI.getSprites());
+            Collections.sort(list);
+            for (Sprite sprite : list) {
                 if (sprite instanceof UIObject) {
                     if (sprite.isTouching(getMousePosition())) {
                         Game.doNext(((UIObject) sprite)::press);
@@ -83,8 +88,6 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (!isTouchingUI())
-            return;
         if (e.getButton() == MouseEvent.BUTTON1) {
             mouseDown = true;
         }
