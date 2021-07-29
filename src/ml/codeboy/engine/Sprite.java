@@ -452,6 +452,7 @@ public class Sprite implements Comparable<Sprite> {
      */
     public void setDepth(int depth) {
         this.depth = depth;
+        Collections.sort(Sprite.getSpritesAt(layer));
     }
 
     /**

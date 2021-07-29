@@ -6,6 +6,7 @@ public class UIText extends UIObject {
         this(text);
         setPosition(x, y);
         setWidthAndHeight(width, height);
+        setDepth(256);
     }
 
     public UIText(String text) {

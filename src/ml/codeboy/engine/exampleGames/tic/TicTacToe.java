@@ -6,7 +6,6 @@ import ml.codeboy.engine.UI.Button;
 
 public class TicTacToe extends Game {
     private Field field;
-    private Button resetButton;
 
     public TicTacToe() {
         super("TicTacToe");
@@ -15,14 +14,14 @@ public class TicTacToe extends Game {
     @Override
     protected void initialise() {
         field = new Field();
-        resetButton = new Button("restart", this::restartGame);
-        resetButton.setPosition((int) (getWidth() * 0.9), getMiddleOfWindow().y);
-        resetButton.setWidthAndHeight((int) (getWidth() * 0.2), (int) (getHeight() * 0.1));
-        resetButton.setDepth(0);
-        resetButton = new Button("undo", this::undoMove);
-        resetButton.setPosition((int) (getWidth() * 0.9), (int) (getMiddleOfWindow().y - getHeight() * 0.1));
-        resetButton.setWidthAndHeight((int) (getWidth() * 0.2), (int) (getHeight() * 0.1));
-        resetButton.setDepth(0);
+        Button button = new Button("restart", this::restartGame);
+        button.setPosition((int) (getWidth() * 0.9), getMiddleOfWindow().y);
+        button.setWidthAndHeight((int) (getWidth() * 0.2), (int) (getHeight() * 0.1));
+        button.setDepth(0);
+        button = new Button("undo", this::undoMove);
+        button.setPosition((int) (getWidth() * 0.9), (int) (getMiddleOfWindow().y - getHeight() * 0.1));
+        button.setWidthAndHeight((int) (getWidth() * 0.2), (int) (getHeight() * 0.1));
+        button.setDepth(0);
         setInitialised();
     }
 
@@ -33,7 +32,6 @@ public class TicTacToe extends Game {
     private void restartGame() {
         field.destroy();
         field = new Field();
-        resetButton.setLayer(Layer.UI);
     }
 
     public Field getField() {
