@@ -12,12 +12,12 @@ public abstract class Task implements Runnable {
 
     public Task(TaskScheduler scheduler) {
         this.scheduler = scheduler;
-        onCreation();
+        initialise();
     }
 
     public abstract void run();
 
-    protected void onCreation() {
+    protected void initialise() {
 
     }
 

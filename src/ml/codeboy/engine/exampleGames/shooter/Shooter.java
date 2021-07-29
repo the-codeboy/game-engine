@@ -39,7 +39,7 @@ public class Shooter extends Game {
             int wave = 1;
 
             @Override
-            protected void onCreation() {
+            protected void initialise() {
                 period = 10;
                 start();
                 getScheduler().scheduleTask(this::run, 0);
