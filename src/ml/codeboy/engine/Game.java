@@ -340,13 +340,14 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
 
     /**
      * Will get called when the Game is initialised right before the gameLoop gets started (before the first game tick)
-     *  You have to implement this in your Game for initialization and after the initialization is done call {@link Game#setInitialised()},
-     *  otherwise the Game will crash.
+     * You have to implement this in your Game for initialization and after the initialization is done call {@link Game#setInitialised()},
+     * otherwise the Game will crash.
      */
     abstract protected void initialise();
 
     /**
-     *  Call this function inside {@link Game#initialise()}.
+     * Call this function inside {@link Game#initialise()}.
+     *
      * @throws IllegalStateException when Game is already initialised.
      */
     protected void setInitialised() {

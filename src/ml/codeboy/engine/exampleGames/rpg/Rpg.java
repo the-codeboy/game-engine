@@ -31,9 +31,9 @@ public class Rpg extends Game {
     protected void initialise() {
         player = new Player(this);
         player.setPosition(getMiddleOfWindow());
-        NPC npc=new NPC("max.png",this);
-        new Item(new ItemStack(ItemStack.Material.SWORD,this)).setPosition(100,50);
-        new Item(new ItemStack(ItemStack.Material.SWORD,this)).setPosition(100,500);
+        NPC npc = new NPC("max.png", this);
+        new Item(new ItemStack(ItemStack.Material.SWORD, this)).setPosition(100, 50);
+        new Item(new ItemStack(ItemStack.Material.SWORD, this)).setPosition(100, 500);
         setInitialised();
     }
 

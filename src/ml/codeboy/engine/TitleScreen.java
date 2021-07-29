@@ -4,8 +4,6 @@ import ml.codeboy.engine.UI.ButtonGroup;
 import ml.codeboy.engine.UI.UIText;
 import ml.codeboy.engine.UI.UITheme;
 
-import java.awt.event.ComponentEvent;
-
 public class TitleScreen extends Game {
     protected UIText title;
     protected ButtonGroup group;
@@ -26,7 +24,7 @@ public class TitleScreen extends Game {
     }
 
     protected void addButton(String text, Runnable onClick) {
-        if(group==null){
+        if (group == null) {
             throw new IllegalStateException("TitleScreen not fully initialised yet please don't add buttons in constructor, and call super.initialise() in initialise method.");
         }
         group.addButton(text, onClick);

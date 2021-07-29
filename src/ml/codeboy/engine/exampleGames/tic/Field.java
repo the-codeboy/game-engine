@@ -3,9 +3,10 @@ package ml.codeboy.engine.exampleGames.tic;
 import ml.codeboy.engine.Game;
 import ml.codeboy.engine.UI.Button;
 import ml.codeboy.engine.UI.UIObject;
+import ml.codeboy.engine.UI.UIText;
 
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Field extends UIObject {
 
@@ -17,22 +18,23 @@ public class Field extends UIObject {
 
     private TicPlayer currentPlayer = TicPlayer.CIRCLE;
 
-    public TicPlayer getCurrentPlayer() {
-        return currentPlayer;
-    }
-
     public Field() {
+        super();
         setInteractable(false);
         setPosition(Game.get().getMiddleOfWindow());
         setSize(Game.get().getHeight());
         for (int i = 0; i < 9; i++) {
             int y = i % 3, x = (i - y) / 3;
-            field[x][y]=TicPlayer.EMPTY;
+            field[x][y] = TicPlayer.EMPTY;
             TicButton button = new TicButton(x, y, this);
             buttons.add(button);
         }
         repositionButtons();
         saveToHistory();
+    }
+
+    public TicPlayer getCurrentPlayer() {
+        return currentPlayer;
     }
 
     private void repositionButtons() {
@@ -78,10 +80,17 @@ public class Field extends UIObject {
     }
 
     public void play(int x, int y) {
-        if (field[x][y] == TicPlayer.EMPTY) {
+        if (field[x][y] == TicPlayer.EMPTY && currentPlayer != TicPlayer.EMPTY) {
             saveToHistory();
             field[x][y] = currentPlayer;
             currentPlayer = currentPlayer.getNext();
+            if (getWinner() != TicPlayer.EMPTY) {
+                UIText text = new UIText(getWinner().toString().toUpperCase() + " won!");
+                text.setPosition((int) ((game.getMiddleOfWindow().x)), (int) (game.getMiddleOfWindow().y));
+                text.setWidthAndHeight((int) (getWidth() * 0.2), (int) (getHeight() * 0.1));
+                text.setColor(Color.black);
+                currentPlayer = TicPlayer.EMPTY;
+            }
             repaintButtons();
         }
     }
@@ -90,10 +99,9 @@ public class Field extends UIObject {
         history.add(copyField());
     }
 
-    public TicPlayer[][] copyField(){
+    public TicPlayer[][] copyField() {
         TicPlayer[][] myInt = new TicPlayer[field.length][];
-        for(int i = 0; i < field.length; i++)
-        {
+        for (int i = 0; i < field.length; i++) {
             myInt[i] = new TicPlayer[field[i].length];
             System.arraycopy(field[i], 0, myInt[i], 0, field[i].length);
         }
@@ -101,17 +109,17 @@ public class Field extends UIObject {
     }
 
     public boolean undo() {
-        if(history.size()>1){
+        if (history.size() > 1) {
             field = history.remove(history.size() - 1);
             repaintButtons();
-            currentPlayer=currentPlayer.getNext();
+            currentPlayer = currentPlayer.getNext();
             return true;
         }
         return false;
     }
 
     public TicPlayer getWinner() {
-        for (TicPlayer i:TicPlayer.values()) {
+        for (TicPlayer i : TicPlayer.values()) {
             if (i == TicPlayer.EMPTY)
                 continue;
             for (int j = 0; j < 3; j++) {

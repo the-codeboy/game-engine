@@ -19,7 +19,7 @@ public class Interaction {
         rpg.closeDialog();
     }
 
-    public boolean isOpened(){
+    public boolean isOpened() {
         return active;
     }
 

@@ -15,7 +15,7 @@ import java.util.HashMap;
  * represents a Sprite that gets drawn on the games window
  * sprites are one of the layers specified by the Layer enum
  */
-public class Sprite implements Comparable<Sprite>{
+public class Sprite implements Comparable<Sprite> {
 
     private static final HashMap<Layer, ArrayList<Sprite>> sprites = new HashMap<>();
 
@@ -324,6 +324,7 @@ public class Sprite implements Comparable<Sprite>{
     }
 
     private void init() {
+        this.game = Game.get();
         setLayer(layer);
     }
 
@@ -436,6 +437,7 @@ public class Sprite implements Comparable<Sprite>{
 
     /**
      * Gets element depth
+     *
      * @return element depth
      */
     public int getDepth() {
@@ -444,6 +446,7 @@ public class Sprite implements Comparable<Sprite>{
 
     /**
      * Sets depth of the element lower values will preferred over bigger ones default value 50
+     *
      * @param depth
      */
     public void setDepth(int depth) {
@@ -561,7 +564,7 @@ public class Sprite implements Comparable<Sprite>{
 
     @Override
     public int compareTo(Sprite o) {
-        return Integer.compare(depth,o.depth);
+        return Integer.compare(depth, o.depth);
     }
 
     /**

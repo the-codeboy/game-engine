@@ -25,9 +25,11 @@ public class Enemy extends Character {
     public Enemy(String name, String path, int x, int y, Game game) {
         super(name, path, x, y, game);
     }
+
     public Enemy(String name, int x, int y, int width, int height, Game game) {
         super(name, x, y, width, height, game);
     }
+
     public Enemy(String name, String path, int x, int y, int width, int height, Game game) {
         super(name, path, x, y, width, height, game);
     }

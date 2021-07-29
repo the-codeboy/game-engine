@@ -12,6 +12,7 @@ public abstract class Upgrade {
     Button button;
     String name;
     private int level;
+
     public Upgrade(int cost, String name, Game game) {
         this.cost = cost;
         upgrades++;

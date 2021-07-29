@@ -1,7 +1,7 @@
 package ml.codeboy.engine.exampleGames.tic;
 
 public enum TicPlayer {
-    EMPTY,CIRCLE,CROSS;
+    EMPTY, CIRCLE, CROSS;
 
     @Override
     public String toString() {
@@ -16,7 +16,8 @@ public enum TicPlayer {
                 return "Error";
         }
     }
-    public TicPlayer getNext(){
+
+    public TicPlayer getNext() {
         if (this == EMPTY) {
             return EMPTY;
         } else {

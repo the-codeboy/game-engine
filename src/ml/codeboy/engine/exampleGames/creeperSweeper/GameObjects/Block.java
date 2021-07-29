@@ -18,6 +18,7 @@ public class Block extends UIObject {
     private final BlockType blockType = BlockType.GRASS;
     private final boolean isCreeper;
     CreeperSweeper cs;
+
     public Block(CreeperSweeper cs, boolean isCreeper) {
         super();
         this.isCreeper = isCreeper;

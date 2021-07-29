@@ -41,6 +41,7 @@ public class Character extends Damageable {
     public Character(String name, int x, int y, int width, int height, Game game) {
         super(name, x, y, width, height, game);
     }
+
     public Character(String name, String path, int x, int y, int width, int height, Game game) {
         super(name, path, x, y, width, height, game);
     }

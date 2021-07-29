@@ -52,6 +52,7 @@ public class GameObject extends Sprite {
         super(name, path, x, y);
         init(game);
     }
+
     public GameObject(String name, int x, int y, int width, int height, Game game) {
         super(name, x, y, width, height);
         init(game);

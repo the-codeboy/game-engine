@@ -7,6 +7,7 @@ public class ItemStack {
     private final Game game;
     private Material type;
     private int count;
+
     public ItemStack(Material type, Game game) {
         this(type, game, 1);
     }

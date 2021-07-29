@@ -6,7 +6,6 @@ import ml.codeboy.engine.exampleGames.shooter.Shooter;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
@@ -73,7 +72,7 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
 
     private void buttonPress() {
         Game.doNext(() -> {
-            ArrayList<Sprite> list=new ArrayList<>(Layer.UI.getSprites());
+            ArrayList<Sprite> list = new ArrayList<>(Layer.UI.getSprites());
             Collections.sort(list);
             for (Sprite sprite : list) {
                 if (sprite instanceof UIObject) {
