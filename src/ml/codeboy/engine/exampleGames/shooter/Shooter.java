@@ -46,7 +46,7 @@ public class Shooter extends Game {
             }
 
             @Override
-            protected void run() {
+            public void run() {
                 if (period > 5)
                     period *= 0.9999;
                 wave++;

@@ -16,7 +16,7 @@ public class TaskScheduler {
     public Task scheduleTask(Runnable toRun, double delay, double period, boolean useRealTime) {
         Task task = new Task(this) {
             @Override
-            protected void run() {
+            public void run() {
                 toRun.run();
             }
         };
@@ -43,18 +43,15 @@ public class TaskScheduler {
         return scheduleTask(toRun, delay, -1, useRealTime);
     }
 
-    void doTick() {
+    public void tick() {
         for (int i = 0, tasksSize = tasks.size(); i < tasksSize; i++) {
             Task task = tasks.get(i);
-            if (task == null) {
-                tasks.remove(i++);
+            if (task == null || task.isCanceled) {
+                tasks.remove(i);
+                tasksSize--;
                 continue;
             }
             task.tick();
-            if (task.isCanceled) {
-                tasks.remove(i++);
-                tasksSize--;
-            }
         }
     }
 }

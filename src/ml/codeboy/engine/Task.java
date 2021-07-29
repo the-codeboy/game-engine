@@ -1,6 +1,6 @@
 package ml.codeboy.engine;
 
-public abstract class Task {
+public abstract class Task implements Runnable {
 
     protected double period = 1;
     double timeSinceLast = 0;
@@ -15,7 +15,7 @@ public abstract class Task {
         onCreation();
     }
 
-    protected abstract void run();
+    public abstract void run();
 
     protected void onCreation() {
 

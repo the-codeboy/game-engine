@@ -410,7 +410,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
      * calls the tick functions on the GameObjects and on this Game´s scheduler
      */
     private void executeGameLogic() {
-        scheduler.doTick();
+        scheduler.tick();
         schedulerTime = System.currentTimeMillis() - tickStartTime;
         earlyTick();
         for (GameObject object :
