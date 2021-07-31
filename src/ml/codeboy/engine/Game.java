@@ -33,7 +33,6 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     private BufferedImage screen;
     private int preferredX = 1000, preferredY = 1000;
     private Graphics2D graphics;
-    private Scene scene;
     private double lastFPS;
     private long lastFrame = System.nanoTime();
     private int FPS;
@@ -276,21 +275,11 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
             screen = new BufferedImage(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, 1);
         }
         getFrame().setLocationRelativeTo(null);
-        //panel=new JPanel(){
-        //    @Override
-        //    protected void paintComponent(Graphics g) {
-        //        g.drawImage(screen,0,0,null);
-        //    }
-        //};
-        //panel.setVisible(true);
-        //getFrame().removeAll();
-        //getFrame().add(panel);
         getFrame().setVisible(true);
 
         graphics = screen.createGraphics();
         camera = new Camera(this);
         camera.setLayer(Layer.INVISIBLE);
-        scene = new Scene(this);
         initialised = false;
         initialise();
         if (!initialised) {
