@@ -3,24 +3,32 @@ package ml.codeboy.engine.exampleGames.tic;
 import ml.codeboy.engine.Game;
 import ml.codeboy.engine.Layer;
 import ml.codeboy.engine.UI.Button;
+import ml.codeboy.engine.UI.UITheme;
+import ml.codeboy.engine.UI.constraints.*;
+
+import java.awt.*;
 
 public class TicTacToe extends Game {
     private Field field;
 
     public TicTacToe() {
-        super("TicTacToe");
+        super("TicTacToe", new Dimension(500,500));
     }
 
     @Override
     protected void initialise() {
         field = new Field();
         Button button = new Button("restart", this::restartGame);
-        button.setPosition((int) (getWidth() * 0.9), getMiddleOfWindow().y);
-        button.setWidthAndHeight((int) (getWidth() * 0.2), (int) (getHeight() * 0.1));
+        button.addConstraints(new YConstraint(0.6),
+                new XConstraint(0.85),
+                new WidthConstraint(0.2),
+                new HeightConstraint(0.1));
         button.setDepth(0);
         button = new Button("undo", this::undoMove);
-        button.setPosition((int) (getWidth() * 0.9), (int) (getMiddleOfWindow().y - getHeight() * 0.1));
-        button.setWidthAndHeight((int) (getWidth() * 0.2), (int) (getHeight() * 0.1));
+        button.addConstraints(new YConstraint(0.4),
+                new XConstraint(0.85),
+                new WidthConstraint(0.2),
+                new HeightConstraint(0.1));
         button.setDepth(0);
         setInitialised();
     }

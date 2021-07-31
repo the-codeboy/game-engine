@@ -1,9 +1,13 @@
 package ml.codeboy.engine.exampleGames.tic;
 
 import ml.codeboy.engine.Game;
+import ml.codeboy.engine.Layer;
 import ml.codeboy.engine.UI.Button;
 import ml.codeboy.engine.UI.UIObject;
 import ml.codeboy.engine.UI.UIText;
+import ml.codeboy.engine.UI.constraints.HeightConstraint;
+import ml.codeboy.engine.UI.constraints.UIConstraint;
+import ml.codeboy.engine.UI.constraints.WidthConstraint;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -23,8 +27,8 @@ public class Field extends UIObject {
     public Field() {
         super();
         setInteractable(false);
-        setPosition(Game.get().getMiddleOfWindow());
-        setSize(Game.get().getHeight());
+//        setLayer(Layer.INVISIBLE);
+        addConstraints(UIConstraint.CENTER_BOTH, new HeightConstraint(1), o -> o.setWidth(Game.get().getHeight()));
         for (int i = 0; i < 9; i++) {
             int y = i % 3, x = (i - y) / 3;
             field[x][y] = TicPlayer.EMPTY;
@@ -37,6 +41,12 @@ public class Field extends UIObject {
 
     public TicPlayer getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    @Override
+    public void recalculate() {
+        super.recalculate();
+        repositionButtons();
     }
 
     private void repositionButtons() {
@@ -92,7 +102,7 @@ public class Field extends UIObject {
                 winnerText = new UIText(getWinner().toString().toUpperCase() + " won!");
                 winnerText.setPosition(game.getMiddleOfWindow().x,game.getMiddleOfWindow().y);
                 winnerText.setWidthAndHeight((int) (getWidth() * 0.2), (int) (getHeight() * 0.1));
-                winnerText.setColor(Color.black);
+                winnerText.setColor(game.getTheme().getTextColor());
                 currentPlayer = TicPlayer.EMPTY;
             }
             repaintButtons();
