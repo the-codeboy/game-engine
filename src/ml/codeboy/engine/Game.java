@@ -136,17 +136,6 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     }
 
     /**
-     * @param ignorePaused if paused should be ignored - see Game#getDeltaTime
-     * @return the time in seconds that passed since the last frame or 0 if there is no Game
-     */
-    @Nullable
-    public static double deltaTime(boolean ignorePaused) {
-        if (get() == null)
-            return 0;
-        return get().getDeltaTime(ignorePaused);
-    }
-
-    /**
      * @return the time since the last frame
      */
     @Nullable
@@ -356,13 +345,12 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
             double deltaTime = tickStartTime - lastFrame;
             lastFrame = tickStartTime;
             deltaSeconds = deltaTime / 1000000000;
-            if ((tickStartTime - lastFPS) > 1000000000) {
+            if ((tickStartTime - lastFPS) > 1000000000) { // WTF?!?!??!
                 FPS = (int) (1000000000 / deltaTime);
                 lastFPS = tickStartTime;
 
                 stats = new String[]{"FPS: " + FPS, "full tick: " + average_fullTick, "render time: " + average_render, "scheduler time: " + average_schedulerTime,
                         "early tick: " + average_earlyTick, "tick: " + average_tick, "internal tick: " + average_internalTick, "late tick: " + average_lateTick};
-
                 average_gameLogic = 0;
                 average_render = 0;
                 average_schedulerTime = 0;
@@ -435,8 +423,8 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
             graphics.drawImage(backgroundImage, 0, 0, null);
         Layer currentLayer = Layer.BACKGROUND;
         while (currentLayer != null) {
-            ArrayList<Sprite> list=currentLayer.getSprites();
-            for(int i=list.size()-1;i>=0;i--){
+            ArrayList<Sprite> list = currentLayer.getSprites();
+            for (int i = list.size() - 1; i >= 0; i--) {
                 list.get(i).render(graphics);
             }
             currentLayer = currentLayer.getNext();
@@ -471,7 +459,28 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
      * @return the time in seconds that passed since the last frame
      */
     public double getDeltaTime() {
-        return isPaused ? 0 : speed * deltaSeconds;
+        return getDeltaTime(false);
+    }
+
+    /**
+     * @param ignorePaused if paused should be ignored - see {@link Game#getDeltaTime(boolean)}
+     * @return the time in seconds that passed since the last frame or 0 if there is no Game
+     */
+    public static double deltaTime(boolean ignorePaused) {
+        if (get() == null)
+            return 0;
+        return get().getDeltaTime(ignorePaused);
+    }
+
+    /**
+     * @param ignorePaused if paused should be ignored - see Game#getDeltaTime
+     * @return the real time (not effected by game speed) in seconds
+     * that passed since the last frame or 0 if there is no Game
+     */
+    public static double realDeltaTime(boolean ignorePaused) {
+        if (get() == null)
+            return 0;
+        return get().getRealDeltaTime(ignorePaused);
     }
 
     /**
@@ -480,7 +489,27 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
      * @return the current deltaTime or #getDeltaTime
      */
     public double getDeltaTime(boolean ignorePaused) {
-        return ignorePaused ? deltaSeconds : getDeltaTime();
+        return getDeltaTime(ignorePaused, false);
+    }
+
+    /**
+     * @param ignorePaused if paused should be ignored for the return value - this can be useful
+     *                     if you want to only pause GameObjects but not UI animations
+     * @return the current deltaTime or #getDeltaTime
+     */
+    public double getRealDeltaTime(boolean ignorePaused) {
+        return getDeltaTime(ignorePaused, true);
+    }
+
+    public double getRealDeltaTime() {
+        return getRealDeltaTime(false);
+    }
+
+    private double getDeltaTime(boolean ignorePaused, boolean ignoreSpeed) {
+        if (ignorePaused || !isPaused) {
+            return ignoreSpeed ? deltaSeconds : deltaSeconds * speed;
+        }
+        return 0;
     }
 
     protected void setCursor(Cursor cursor) {
