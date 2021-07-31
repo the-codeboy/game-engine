@@ -31,7 +31,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     protected UITheme theme = UITheme.DEFAULT;
     protected Color defaultColor = Color.WHITE;
     private BufferedImage screen;
-    private int preferredX = 1000, preferredY = 1000;
+    private Dimension preferredDimension = new Dimension(1000, 1000);
     private Graphics2D graphics;
     private double lastFPS;
     private long lastFrame = System.nanoTime();
@@ -69,20 +69,18 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     }
 
     /**
-     * @param name       the name of the new Game
-     * @param preferredX the width of the Game´s window
-     * @param preferredY the height of the Game´s window
+     * @param name               the name of the new Game
+     * @param preferredDimension the preferred dimensions of the Game´s window
      * @deprecated there´s problems with this please use fullscreen
      */
     @Deprecated
-    public Game(String name, int preferredX, int preferredY) {
+    public Game(String name, Dimension preferredDimension) {
         if (instance != null)
             throw new IllegalStateException("can not create second instance of game!");
         instance = this;
         this.name = name;
         this.fullScreen = false;
-        this.preferredX = preferredX;
-        this.preferredY = preferredY;
+        this.preferredDimension = preferredDimension;
         init();
     }
 
@@ -267,7 +265,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
                 getFrame().setUndecorated(true);
             getFrame().setExtendedState(Frame.MAXIMIZED_BOTH);
         } else {
-            getFrame().setSize(preferredX, preferredY);
+            getFrame().setSize(preferredDimension);
         }
         if (getFrame().getWidth() > 0 && getFrame().getHeight() > 0) {
             screen = new BufferedImage(getFrame().getWidth(), getFrame().getHeight(), 1);
