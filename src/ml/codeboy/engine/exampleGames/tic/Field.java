@@ -16,6 +16,8 @@ public class Field extends UIObject {
 
     private ArrayList<TicButton> buttons = new ArrayList<>();
 
+    private UIText winnerText;
+
     private TicPlayer currentPlayer = TicPlayer.CIRCLE;
 
     public Field() {
@@ -65,6 +67,8 @@ public class Field extends UIObject {
         super.destroy();
         for (Button b : buttons)
             b.destroy();
+        if (winnerText != null)
+            winnerText.destroy();
     }
 
 
@@ -85,10 +89,10 @@ public class Field extends UIObject {
             field[x][y] = currentPlayer;
             currentPlayer = currentPlayer.getNext();
             if (getWinner() != TicPlayer.EMPTY) {
-                UIText text = new UIText(getWinner().toString().toUpperCase() + " won!");
-                text.setPosition((int) ((game.getMiddleOfWindow().x)), (int) (game.getMiddleOfWindow().y));
-                text.setWidthAndHeight((int) (getWidth() * 0.2), (int) (getHeight() * 0.1));
-                text.setColor(Color.black);
+                winnerText = new UIText(getWinner().toString().toUpperCase() + " won!");
+                winnerText.setPosition(game.getMiddleOfWindow().x,game.getMiddleOfWindow().y);
+                winnerText.setWidthAndHeight((int) (getWidth() * 0.2), (int) (getHeight() * 0.1));
+                winnerText.setColor(Color.black);
                 currentPlayer = TicPlayer.EMPTY;
             }
             repaintButtons();
@@ -109,7 +113,7 @@ public class Field extends UIObject {
     }
 
     public boolean undo() {
-        if (history.size() > 1) {
+        if (history.size() > 1 && winnerText == null) {
             field = history.remove(history.size() - 1);
             repaintButtons();
             currentPlayer = currentPlayer.getNext();
