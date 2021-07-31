@@ -1,15 +1,12 @@
 package ml.codeboy.engine.exampleGames.tic;
 
 import ml.codeboy.engine.Game;
-import ml.codeboy.engine.Layer;
 import ml.codeboy.engine.UI.Button;
 import ml.codeboy.engine.UI.UIObject;
 import ml.codeboy.engine.UI.UIText;
 import ml.codeboy.engine.UI.constraints.HeightConstraint;
 import ml.codeboy.engine.UI.constraints.UIConstraint;
-import ml.codeboy.engine.UI.constraints.WidthConstraint;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class Field extends UIObject {
@@ -100,7 +97,7 @@ public class Field extends UIObject {
             currentPlayer = currentPlayer.getNext();
             if (getWinner() != TicPlayer.EMPTY) {
                 winnerText = new UIText(getWinner().toString().toUpperCase() + " won!");
-                winnerText.setPosition(game.getMiddleOfWindow().x,game.getMiddleOfWindow().y);
+                winnerText.setPosition(game.getMiddleOfWindow().x, game.getMiddleOfWindow().y);
                 winnerText.setWidthAndHeight((int) (getWidth() * 0.2), (int) (getHeight() * 0.1));
                 winnerText.setTextColor(game.getTheme().getTextColor());
                 currentPlayer = TicPlayer.EMPTY;

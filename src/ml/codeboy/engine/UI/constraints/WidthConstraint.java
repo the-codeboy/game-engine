@@ -3,7 +3,7 @@ package ml.codeboy.engine.UI.constraints;
 import ml.codeboy.engine.Game;
 import ml.codeboy.engine.UI.UIObject;
 
-public class WidthConstraint implements UIConstraint{
+public class WidthConstraint implements UIConstraint {
     private final double percentage;
 
     public WidthConstraint(double percentage) {
@@ -12,6 +12,6 @@ public class WidthConstraint implements UIConstraint{
 
     @Override
     public void resize(UIObject object) {
-        object.setWidth((int) (Game.get().getWidth()* percentage));
+        object.setWidth((int) (Game.get().getWidth() * percentage));
     }
 }

@@ -2,7 +2,7 @@ package ml.codeboy.engine.UI.constraints;
 
 import ml.codeboy.engine.UI.UIObject;
 
-public class CombinedConstraint implements UIConstraint{
+public class CombinedConstraint implements UIConstraint {
     private final UIConstraint[] constraints;
 
     public CombinedConstraint(UIConstraint... constraints) {
@@ -11,7 +11,7 @@ public class CombinedConstraint implements UIConstraint{
 
     @Override
     public void resize(UIObject object) {
-        for (UIConstraint constraint:constraints)
+        for (UIConstraint constraint : constraints)
             constraint.resize(object);
     }
 }

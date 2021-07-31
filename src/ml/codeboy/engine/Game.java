@@ -16,18 +16,6 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
 
     private static JFrame frame;
     private static Game instance;
-
-
-    private static void newFrame(){
-        if(frame!=null)
-            frame.dispose();
-        frame=new JFrame();
-        frame.addKeyListener(Input.getInstance());
-        frame.addMouseListener(Input.getInstance());
-        frame.addMouseWheelListener(Input.getInstance());
-        frame.addMouseMotionListener(Input.getInstance());
-    }
-
     private final String name;
     private final boolean fullScreen;
     private final long start = System.currentTimeMillis() / 1000;
@@ -42,9 +30,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     private int FPS;
     private boolean closed = false;
     private Camera camera;
-
     private BufferedImage backgroundImage;
-
     private double speed = 1;
     private Runnable exitAction = () -> {
     };
@@ -55,7 +41,6 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     private double deltaSeconds;
     private boolean isPaused = false;
     private boolean isGameOver = false;
-
     private boolean initialised;
 
     /**
@@ -113,6 +98,16 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         init();
     }
 
+    private static void newFrame() {
+        if (frame != null)
+            frame.dispose();
+        frame = new JFrame();
+        frame.addKeyListener(Input.getInstance());
+        frame.addMouseListener(Input.getInstance());
+        frame.addMouseWheelListener(Input.getInstance());
+        frame.addMouseMotionListener(Input.getInstance());
+    }
+
     /**
      * @return the current Game singleton
      */
@@ -152,6 +147,27 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         if (get() != null)
             get().getScheduler().scheduleTask(runnable, 0, true);
         else System.err.println("there is no game");
+    }
+
+    /**
+     * @param ignorePaused if paused should be ignored - see {@link Game#getDeltaTime(boolean)}
+     * @return the time in seconds that passed since the last frame or 0 if there is no Game
+     */
+    public static double deltaTime(boolean ignorePaused) {
+        if (get() == null)
+            return 0;
+        return get().getDeltaTime(ignorePaused);
+    }
+
+    /**
+     * @param ignorePaused if paused should be ignored - see Game#getDeltaTime
+     * @return the real time (not effected by game speed) in seconds
+     * that passed since the last frame or 0 if there is no Game
+     */
+    public static double realDeltaTime(boolean ignorePaused) {
+        if (get() == null)
+            return 0;
+        return get().getRealDeltaTime(ignorePaused);
     }
 
     public void componentResized(ComponentEvent ce) {
@@ -264,7 +280,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         if (fullScreen) {
             if (!getFrame().isDisplayable())
-            getFrame().setExtendedState(Frame.MAXIMIZED_BOTH);
+                getFrame().setExtendedState(Frame.MAXIMIZED_BOTH);
         } else {
             getFrame().setSize(preferredDimension);
         }
@@ -371,13 +387,13 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
                 average_internalTick /= numberOfCycles;
                 average_fullTick /= numberOfCycles;
                 stats = new String[]{formatStatNumbers("FPS", average_fps),
-                        formatStatNumbers("full tick", average_fullTick ),
-                        formatStatNumbersPercentage("render time", average_render ,average_fullTick),
-                        formatStatNumbersPercentage("scheduler time", average_schedulerTime ,average_fullTick),
-                        formatStatNumbersPercentage("early tick", average_earlyTick ,average_fullTick),
-                        formatStatNumbersPercentage("tick", average_tick ,average_fullTick),
-                        formatStatNumbersPercentage("internal tick", average_internalTick ,average_fullTick),
-                        formatStatNumbersPercentage("late tick", average_lateTick ,average_fullTick)};
+                        formatStatNumbers("full tick", average_fullTick),
+                        formatStatNumbersPercentage("render time", average_render, average_fullTick),
+                        formatStatNumbersPercentage("scheduler time", average_schedulerTime, average_fullTick),
+                        formatStatNumbersPercentage("early tick", average_earlyTick, average_fullTick),
+                        formatStatNumbersPercentage("tick", average_tick, average_fullTick),
+                        formatStatNumbersPercentage("internal tick", average_internalTick, average_fullTick),
+                        formatStatNumbersPercentage("late tick", average_lateTick, average_fullTick)};
                 average_fps = 0;
                 average_gameLogic = 0;
                 average_render = 0;
@@ -415,16 +431,16 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     }
 
     private String formatStatNumbersPercentage(String before, Double part, Double full) {
-        double percentage = (part/full)*100;
-        if(percentage<0.01){
-            return String.format("%s: %.0f%%",before,percentage);
+        double percentage = (part / full) * 100;
+        if (percentage < 0.01) {
+            return String.format("%s: %.0f%%", before, percentage);
         }
         return String.format("%s: %.1f%%", before, percentage);
     }
 
     private String formatStatNumbers(String before, Double number) {
-        if(number<0.01){
-            return String.format("%s: %.0f",before,number);
+        if (number < 0.01) {
+            return String.format("%s: %.0f", before, number);
         }
         return String.format("%s: %.2f", before, number);
     }
@@ -506,27 +522,6 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
      */
     public double getDeltaTime() {
         return getDeltaTime(false);
-    }
-
-    /**
-     * @param ignorePaused if paused should be ignored - see {@link Game#getDeltaTime(boolean)}
-     * @return the time in seconds that passed since the last frame or 0 if there is no Game
-     */
-    public static double deltaTime(boolean ignorePaused) {
-        if (get() == null)
-            return 0;
-        return get().getDeltaTime(ignorePaused);
-    }
-
-    /**
-     * @param ignorePaused if paused should be ignored - see Game#getDeltaTime
-     * @return the real time (not effected by game speed) in seconds
-     * that passed since the last frame or 0 if there is no Game
-     */
-    public static double realDeltaTime(boolean ignorePaused) {
-        if (get() == null)
-            return 0;
-        return get().getRealDeltaTime(ignorePaused);
     }
 
     /**

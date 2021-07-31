@@ -448,6 +448,7 @@ public class Sprite implements Comparable<Sprite> {
 
     /**
      * Sets depth of the element lower values will preferred over higher ones
+     *
      * @param depth any int value
      */
     public void setDepth(int depth) {
@@ -497,7 +498,8 @@ public class Sprite implements Comparable<Sprite> {
     /**
      * called when the window gets resized. Override this to adapt to changes of window size
      */
-    public void recalculate(){}
+    public void recalculate() {
+    }
 
     public boolean isOnScreen() {
         return game != null && game.getCamera().isOnScreen(this);

@@ -12,6 +12,6 @@ public class XConstraint implements UIConstraint {
 
     @Override
     public void resize(UIObject object) {
-        object.setX(Game.get().getWidth()* percentage);
+        object.setX(Game.get().getWidth() * percentage);
     }
 }

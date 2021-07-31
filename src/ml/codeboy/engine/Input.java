@@ -5,8 +5,6 @@ import ml.codeboy.engine.exampleGames.shooter.Shooter;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 public class Input implements MouseListener, KeyListener, MouseWheelListener, MouseMotionListener {

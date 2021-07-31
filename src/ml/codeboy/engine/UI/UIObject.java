@@ -13,8 +13,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class UIObject extends Sprite {
-    private List<UIConstraint>constraints=new ArrayList<>();
-
     protected Color background, foreground, textColor;
     protected boolean hasBorder, rounded;
     protected int borderSize;
@@ -22,6 +20,7 @@ public class UIObject extends Sprite {
     protected List<String> lines = new ArrayList<>();
     UITheme theme = UITheme.DEFAULT;
     float borderpercentage = 0.95f;
+    private List<UIConstraint> constraints = new ArrayList<>();
     private boolean animated = false;
     private String text = "";
     private double size = 1;
@@ -38,13 +37,13 @@ public class UIObject extends Sprite {
         setTheme(theme);
     }
 
-    public UIObject addConstraint(UIConstraint constraint){
+    public UIObject addConstraint(UIConstraint constraint) {
         constraints.add(constraint);
         recalculate();
         return this;
     }
 
-    public UIObject addConstraints(UIConstraint... constraints){
+    public UIObject addConstraints(UIConstraint... constraints) {
         this.constraints.addAll(Arrays.asList(constraints));
         recalculate();
         return this;
@@ -52,7 +51,7 @@ public class UIObject extends Sprite {
 
     @Override
     public void recalculate() {
-        for (UIConstraint constraint:constraints)
+        for (UIConstraint constraint : constraints)
             constraint.resize(this);
         super.recalculate();
         recalculateTextSize();

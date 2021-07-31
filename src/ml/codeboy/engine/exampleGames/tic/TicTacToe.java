@@ -1,10 +1,11 @@
 package ml.codeboy.engine.exampleGames.tic;
 
 import ml.codeboy.engine.Game;
-import ml.codeboy.engine.Layer;
 import ml.codeboy.engine.UI.Button;
-import ml.codeboy.engine.UI.UITheme;
-import ml.codeboy.engine.UI.constraints.*;
+import ml.codeboy.engine.UI.constraints.HeightConstraint;
+import ml.codeboy.engine.UI.constraints.WidthConstraint;
+import ml.codeboy.engine.UI.constraints.XConstraint;
+import ml.codeboy.engine.UI.constraints.YConstraint;
 
 import java.awt.*;
 
@@ -12,7 +13,7 @@ public class TicTacToe extends Game {
     private Field field;
 
     public TicTacToe() {
-        super("TicTacToe", new Dimension(500,500));
+        super("TicTacToe", new Dimension(500, 500));
     }
 
     @Override

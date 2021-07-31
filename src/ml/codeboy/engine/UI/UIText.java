@@ -16,9 +16,10 @@ public class UIText extends UIObject {
         setInteractable(false);
         setDepth(256);
     }
-    public void setTextColor(Color color){
-        if(color==null)
+
+    public void setTextColor(Color color) {
+        if (color == null)
             throw new IllegalArgumentException("Color can not be null");
-        this.textColor=color;
+        this.textColor = color;
     }
 }
