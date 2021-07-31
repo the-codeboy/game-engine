@@ -4,6 +4,7 @@ import ml.codeboy.engine.Game;
 import ml.codeboy.engine.Input;
 import ml.codeboy.engine.Layer;
 import ml.codeboy.engine.Sprite;
+import ml.codeboy.engine.UI.constraints.UIConstraint;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -11,6 +12,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class UIObject extends Sprite {
+    private List<UIConstraint>constraints=new ArrayList<>();
+
     protected Color background, foreground, textColor;
     protected boolean hasBorder, rounded;
     protected int borderSize;
@@ -32,6 +35,19 @@ public class UIObject extends Sprite {
         super(SpriteType.Custom);
         setLayer(Layer.UI);
         setTheme(theme);
+    }
+
+    public UIObject addConstraint(UIConstraint constraint){
+        constraints.add(constraint);
+        recalculate();
+        return this;
+    }
+
+    @Override
+    public void recalculate() {
+        for (UIConstraint constraint:constraints)
+            constraint.resize(this);
+        super.recalculate();
     }
 
     @Override

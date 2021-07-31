@@ -152,6 +152,9 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     public void componentResized(ComponentEvent ce) {
         screen = new BufferedImage(getFrame().getWidth(), getFrame().getHeight(), 1);
         graphics = screen.createGraphics();
+        for (Layer layer:Layer.values())
+            for (Sprite sprite:layer.getSprites())
+                sprite.recalculate();
     }
 
     public Camera getCamera() {

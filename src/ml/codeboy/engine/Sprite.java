@@ -494,6 +494,11 @@ public class Sprite implements Comparable<Sprite> {
         return rectangle.intersects(getX(), getY(), getWidth(), getHeight());
     }
 
+    /**
+     * called when the window gets resized. Override this to adapt to changes of window size
+     */
+    public void recalculate(){}
+
     public boolean isOnScreen() {
         return game != null && game.getCamera().isOnScreen(this);
     }
