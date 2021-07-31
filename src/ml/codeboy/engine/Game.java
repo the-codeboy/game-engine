@@ -318,7 +318,6 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         } catch (NoSuchMethodException e) {
             throw new IllegalArgumentException(game.getName() + " does not have the right constructor!");
         }
-        exit();
         setExitAction(() -> {
             try {
                 constructor.newInstance();
@@ -326,6 +325,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
                 e.printStackTrace();
             }
         });
+        exit();
     }
 
     /**
