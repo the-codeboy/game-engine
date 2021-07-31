@@ -4,14 +4,14 @@ import ml.codeboy.engine.Game;
 import ml.codeboy.engine.UI.UIObject;
 
 public class HeightConstraint implements UIConstraint{
-    private final double percentace;
+    private final double percentage;
 
     public HeightConstraint(double percentage) {
-        this.percentace = percentage;
+        this.percentage = percentage;
     }
 
     @Override
     public void resize(UIObject object) {
-        object.setHeight((int) (Game.get().getHeight()*percentace));
+        object.setHeight((int) (Game.get().getHeight()* percentage));
     }
 }
