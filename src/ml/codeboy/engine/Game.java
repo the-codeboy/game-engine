@@ -14,10 +14,14 @@ import java.util.ConcurrentModificationException;
 
 public abstract class Game implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener, ComponentListener {
 
-    private static final JFrame frame = new JFrame();
+    private static JFrame frame;
     private static Game instance;
 
-    static {
+
+    private static void newFrame(){
+        if(frame!=null)
+            frame.dispose();
+        frame=new JFrame();
         frame.addKeyListener(Input.getInstance());
         frame.addMouseListener(Input.getInstance());
         frame.addMouseWheelListener(Input.getInstance());
@@ -251,15 +255,16 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
      * creates the window for the Game and initialises listeners - also starts the gameLoop
      */
     private void init() {
+        newFrame();
         frame.getContentPane().addComponentListener(this);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         if (fullScreen) {
             if (!getFrame().isDisplayable())
-                getFrame().setUndecorated(true);
             getFrame().setExtendedState(Frame.MAXIMIZED_BOTH);
         } else {
             getFrame().setSize(preferredDimension);
         }
+        getFrame().setUndecorated(fullScreen);
         if (getFrame().getWidth() > 0 && getFrame().getHeight() > 0) {
             screen = new BufferedImage(getFrame().getWidth(), getFrame().getHeight(), 1);
         } else {
