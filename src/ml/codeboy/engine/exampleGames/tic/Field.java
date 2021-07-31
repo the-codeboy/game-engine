@@ -102,7 +102,7 @@ public class Field extends UIObject {
                 winnerText = new UIText(getWinner().toString().toUpperCase() + " won!");
                 winnerText.setPosition(game.getMiddleOfWindow().x,game.getMiddleOfWindow().y);
                 winnerText.setWidthAndHeight((int) (getWidth() * 0.2), (int) (getHeight() * 0.1));
-                winnerText.setColor(game.getTheme().getTextColor());
+                winnerText.setTextColor(game.getTheme().getTextColor());
                 currentPlayer = TicPlayer.EMPTY;
             }
             repaintButtons();
