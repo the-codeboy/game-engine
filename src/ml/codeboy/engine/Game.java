@@ -33,7 +33,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     private BufferedImage screen;
     private Dimension preferredDimension = new Dimension(1000, 1000);
     private Graphics2D graphics;
-    private double lastFPS;
+    private double lastStatsUpdate;
     private long lastFrame = System.nanoTime();
     private int FPS;
     private boolean closed = false;
@@ -45,7 +45,8 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     private Runnable exitAction = () -> {
     };
     private long tickStartTime, gameLogic, render, schedulerTime, earlyTick, tick, lateTick, internalTick, fullTick;
-    private long average_gameLogic, average_render, average_schedulerTime, average_earlyTick, average_tick, average_lateTick, average_internalTick, average_fullTick;
+    private long average_gameLogic, average_fps, average_render, average_schedulerTime, average_earlyTick, average_tick, average_lateTick, average_internalTick, average_fullTick;
+    private int numberOfCycles = 0;
     private String[] stats = {};
     private double deltaSeconds;
     private boolean isPaused = false;
@@ -348,12 +349,18 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
             double deltaTime = tickStartTime - lastFrame;
             lastFrame = tickStartTime;
             deltaSeconds = deltaTime / 1000000000;
-            if ((tickStartTime - lastFPS) > 1000000000) { // WTF?!?!??!
-                FPS = (int) (1000000000 / deltaTime);
-                lastFPS = tickStartTime;
-
-                stats = new String[]{"FPS: " + FPS, "full tick: " + average_fullTick, "render time: " + average_render, "scheduler time: " + average_schedulerTime,
-                        "early tick: " + average_earlyTick, "tick: " + average_tick, "internal tick: " + average_internalTick, "late tick: " + average_lateTick};
+            FPS = (int) (1000000000 / deltaTime);
+            if ((tickStartTime - lastStatsUpdate) > 1000000000) {
+                lastStatsUpdate = tickStartTime;
+                stats = new String[]{formatStatNumbers("FPS", average_fps / (double) numberOfCycles),
+                        formatStatNumbers("full tick", average_fullTick / (double) numberOfCycles),
+                        formatStatNumbers("render time", average_render / (double) numberOfCycles),
+                        formatStatNumbers("scheduler time", average_schedulerTime / (double) numberOfCycles),
+                        formatStatNumbers("early tick", average_earlyTick / (double) numberOfCycles),
+                        formatStatNumbers("tick", average_tick / (double) numberOfCycles),
+                        formatStatNumbers("internal tick", average_internalTick / (double) numberOfCycles),
+                        formatStatNumbers("late tick", average_lateTick / (double) numberOfCycles)};
+                average_fps = 0;
                 average_gameLogic = 0;
                 average_render = 0;
                 average_schedulerTime = 0;
@@ -362,7 +369,10 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
                 average_lateTick = 0;
                 average_internalTick = 0;
                 average_fullTick = 0;
+                numberOfCycles = 0;
             }
+            numberOfCycles++;
+            average_fps += FPS;
             average_gameLogic += gameLogic;
             average_render += render;
             average_schedulerTime += schedulerTime;
@@ -384,6 +394,13 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         }
         instance = null;
         onExit();
+    }
+
+    private String formatStatNumbers(String before, Double number) {
+        if(number<0.01){
+            return String.format("%s: %.0f",before,number);
+        }
+        return String.format("%s: %.2f", before, number);
     }
 
     /**
