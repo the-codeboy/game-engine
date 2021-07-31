@@ -49,8 +49,8 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     private Runnable exitAction = () -> {
     };
     private long tickStartTime, gameLogic, render, schedulerTime, earlyTick, tick, lateTick, internalTick, fullTick;
-    private long average_gameLogic, average_fps, average_render, average_schedulerTime, average_earlyTick, average_tick, average_lateTick, average_internalTick, average_fullTick;
-    private int numberOfCycles = 0;
+    private double average_gameLogic, average_fps, average_render, average_schedulerTime, average_earlyTick, average_tick, average_lateTick, average_internalTick, average_fullTick;
+    private double numberOfCycles = 1;
     private String[] stats = {};
     private double deltaSeconds;
     private boolean isPaused = false;
@@ -357,14 +357,23 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
             FPS = (int) (1000000000 / deltaTime);
             if ((tickStartTime - lastStatsUpdate) > 1000000000) {
                 lastStatsUpdate = tickStartTime;
-                stats = new String[]{formatStatNumbers("FPS", average_fps / (double) numberOfCycles),
-                        formatStatNumbers("full tick", average_fullTick / (double) numberOfCycles),
-                        formatStatNumbers("render time", average_render / (double) numberOfCycles),
-                        formatStatNumbers("scheduler time", average_schedulerTime / (double) numberOfCycles),
-                        formatStatNumbers("early tick", average_earlyTick / (double) numberOfCycles),
-                        formatStatNumbers("tick", average_tick / (double) numberOfCycles),
-                        formatStatNumbers("internal tick", average_internalTick / (double) numberOfCycles),
-                        formatStatNumbers("late tick", average_lateTick / (double) numberOfCycles)};
+                average_fps /= numberOfCycles;
+                average_gameLogic /= numberOfCycles;
+                average_render /= numberOfCycles;
+                average_schedulerTime /= numberOfCycles;
+                average_earlyTick /= numberOfCycles;
+                average_tick /= numberOfCycles;
+                average_lateTick /= numberOfCycles;
+                average_internalTick /= numberOfCycles;
+                average_fullTick /= numberOfCycles;
+                stats = new String[]{formatStatNumbers("FPS", average_fps),
+                        formatStatNumbers("full tick", average_fullTick ),
+                        formatStatNumbersPercentage("render time", average_render ,average_fullTick),
+                        formatStatNumbersPercentage("scheduler time", average_schedulerTime ,average_fullTick),
+                        formatStatNumbersPercentage("early tick", average_earlyTick ,average_fullTick),
+                        formatStatNumbersPercentage("tick", average_tick ,average_fullTick),
+                        formatStatNumbersPercentage("internal tick", average_internalTick ,average_fullTick),
+                        formatStatNumbersPercentage("late tick", average_lateTick ,average_fullTick)};
                 average_fps = 0;
                 average_gameLogic = 0;
                 average_render = 0;
@@ -374,7 +383,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
                 average_lateTick = 0;
                 average_internalTick = 0;
                 average_fullTick = 0;
-                numberOfCycles = 0;
+                numberOfCycles = 1;
             }
             numberOfCycles++;
             average_fps += FPS;
@@ -399,6 +408,14 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         }
         instance = null;
         onExit();
+    }
+
+    private String formatStatNumbersPercentage(String before, Double part, Double full) {
+        double percentage = (part/full)*100;
+        if(percentage<0.01){
+            return String.format("%s: %.0f%%",before,percentage);
+        }
+        return String.format("%s: %.1f%%", before, percentage);
     }
 
     private String formatStatNumbers(String before, Double number) {
