@@ -8,6 +8,7 @@ import ml.codeboy.engine.UI.constraints.UIConstraint;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,11 +44,18 @@ public class UIObject extends Sprite {
         return this;
     }
 
+    public UIObject addConstraints(UIConstraint... constraints){
+        this.constraints.addAll(Arrays.asList(constraints));
+        recalculate();
+        return this;
+    }
+
     @Override
     public void recalculate() {
         for (UIConstraint constraint:constraints)
             constraint.resize(this);
         super.recalculate();
+        recalculateTextSize();
     }
 
     @Override
