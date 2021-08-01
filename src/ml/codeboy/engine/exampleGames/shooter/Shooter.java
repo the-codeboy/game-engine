@@ -1,6 +1,7 @@
 package ml.codeboy.engine.exampleGames.shooter;
 
 import ml.codeboy.engine.*;
+import ml.codeboy.engine.Saving.GameVariables;
 import ml.codeboy.engine.UI.Button;
 import ml.codeboy.engine.exampleGames.menu.Menu;
 import ml.codeboy.engine.exampleGames.shooter.GameObjects.Enemy;
@@ -113,6 +114,11 @@ public class Shooter extends Game {
 
         unPause();
         setInitialised();
+        setVariables(GameVariables.loadFromFile("./shooter.save"));
+        if(getVariables().containsVariable("coins")){
+            player.setCoins(getVariables().getIntVariable("coins"));
+        }
+
     }
 
     private void initUpgrades() {
@@ -170,6 +176,8 @@ public class Shooter extends Game {
 
     @Override
     protected void exit() {
+        getVariables().addVariable("coins",player.getCoins());
+        getVariables().saveToFile("./shooter.save");
         super.exit();
     }
 
