@@ -4,12 +4,14 @@ import ml.codeboy.engine.Game;
 import ml.codeboy.engine.GameObject;
 import ml.codeboy.engine.Input;
 import ml.codeboy.engine.Layer;
+import ml.codeboy.engine.Saving.SaveClass;
 import ml.codeboy.engine.animation.State;
 import ml.codeboy.engine.exampleGames.rpg.GameObjects.Item;
 import ml.codeboy.engine.exampleGames.rpg.Rpg;
 
 import java.awt.event.KeyEvent;
 
+@SaveClass
 public class Player extends Character {
 
     int speed = 100;

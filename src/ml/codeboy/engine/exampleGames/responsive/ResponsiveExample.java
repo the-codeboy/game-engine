@@ -1,6 +1,7 @@
 package ml.codeboy.engine.exampleGames.responsive;
 
 import ml.codeboy.engine.Game;
+import ml.codeboy.engine.Saving.GameVariables;
 import ml.codeboy.engine.UI.Button;
 import ml.codeboy.engine.UI.UIText;
 import ml.codeboy.engine.UI.constraints.HeightConstraint;
@@ -13,6 +14,11 @@ import java.awt.*;
 public class ResponsiveExample extends Game {
     public ResponsiveExample() {
         super("ResponsiveExample", new Dimension(1000, 1000));
+    }
+
+    @Override
+    protected GameVariables initVariables() {
+        return GameVariables.loadFromFile("responsive.save");
     }
 
     @Override

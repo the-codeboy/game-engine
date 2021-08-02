@@ -3,24 +3,35 @@ package ml.codeboy.engine.exampleGames.shooter.GameObjects;
 import ml.codeboy.engine.Damageable;
 import ml.codeboy.engine.Game;
 import ml.codeboy.engine.GameObject;
-import ml.codeboy.engine.Saving.GameVariables;
+import ml.codeboy.engine.Saving.SaveValue;
+import ml.codeboy.engine.Saving.SaveClass;
 import ml.codeboy.engine.UI.Button;
 import ml.codeboy.engine.events.DestroyEvent;
 
 import java.awt.*;
 
+@SaveClass
 public class Player extends Damageable {
     private static Player player;
     double xDir = 0, yDir = 0;
     int length = 10;
+    @SaveValue
     int piercing = 1;
-    int maxAmmo = 50;
+    @SaveValue
+    public int maxAmmo = 50;
+    @SaveValue
     double ammo = maxAmmo;
+    @SaveValue
     double cooldown, maxCooldown = 0.2;
+    @SaveValue
     private int coins = 10;
+    @SaveValue
     private double bulletSpeed = 10;
+    @SaveValue
     private double reloadSpeed = 1;
+    @SaveValue
     private int bulletSize = 4;
+    @SaveValue
     private int bullets = 1;
 
     public Player(Game game) {
@@ -34,44 +45,6 @@ public class Player extends Damageable {
         setY((float) Game.get().getFrame().getHeight() / 2);
         listenForCollision(Enemy.class);
         setLives(10);
-        initializeVariables(game.getVariables());
-    }
-
-    private void initializeVariables(GameVariables variables){
-        Integer var=variables.getIntVariable("maxAmmo");
-        if(var!=null)
-            maxAmmo=var;
-        var=variables.getIntVariable("ammo");
-        if(var!=null)
-            ammo=var;
-        var=variables.getIntVariable("coins");
-        if(var!=null)
-            coins=var;
-        var=variables.getIntVariable("bulletSpeed");
-        if(var!=null)
-            bulletSpeed=var;
-        var=variables.getIntVariable("reloadSpeed");
-        if(var!=null)
-            reloadSpeed=var;
-        var=variables.getIntVariable("bulletSize");
-        if(var!=null)
-            bulletSize=var;
-        var=variables.getIntVariable("bulletSize");
-        if(var!=null)
-            bulletSize=var;
-        var=variables.getIntVariable("bullets");
-        if(var!=null)
-            bullets=var;
-    }
-    public void saveVariables(){
-        GameVariables variables=this.game.getVariables();
-        variables.putVariable("maxAmmo",maxAmmo);
-        variables.putVariable("ammo",ammo);
-        variables.putVariable("coins",coins);
-        variables.putVariable("bulletSpeed",bulletSpeed);
-        variables.putVariable("reloadSpeed",reloadSpeed);
-        variables.putVariable("bulletSize",bulletSize);
-        variables.putVariable("bullets",bullets);
     }
 
     public static Player getPlayer() {

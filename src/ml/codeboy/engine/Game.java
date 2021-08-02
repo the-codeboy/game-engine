@@ -2,6 +2,7 @@ package ml.codeboy.engine;
 
 import com.sun.istack.internal.Nullable;
 import ml.codeboy.engine.Saving.GameVariables;
+import ml.codeboy.engine.Saving.SaveClass;
 import ml.codeboy.engine.UI.UITheme;
 
 import javax.swing.*;
@@ -44,6 +45,8 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     private boolean isGameOver = false;
     private boolean initialised;
     private GameVariables variables;
+
+    private boolean closeGame = false;
 
     /**
      * @param name the name of the new Game
@@ -274,13 +277,13 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     }
 
     public GameVariables getVariables() {
-        if(variables==null)
-            variables=new GameVariables();
+        if (variables == null)
+            variables = initVariables();
         return variables;
     }
 
     public void setVariables(GameVariables variables) {
-        if(variables==null)
+        if (variables == null)
             throw new IllegalArgumentException("GameVariables can not be null");
         this.variables = variables;
     }
@@ -291,7 +294,15 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     private void init() {
         newFrame();
         frame.getContentPane().addComponentListener(this);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        WindowListener exitListener = new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                closeGame = true;
+                exit();
+            }
+        };
+        frame.addWindowListener(exitListener);
         if (fullScreen) {
             if (!getFrame().isDisplayable())
                 getFrame().setExtendedState(Frame.MAXIMIZED_BOTH);
@@ -310,13 +321,15 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         graphics = screen.createGraphics();
         camera = new Camera(this);
         camera.setLayer(Layer.INVISIBLE);
+        variables = initVariables();
+        if (variables == null)
+            throw new IllegalStateException("GameVariables can not be null");
         initialised = false;
         initialise();
         if (!initialised) {
             getFrame().dispose();
             throw new IllegalStateException("Game not initialised");
         }
-        variables = new GameVariables();
         Thread gameThread = new Thread(this::startGameLoop);
         gameThread.start();
     }
@@ -338,8 +351,16 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
             layer = layer.getNext();
         }
 //        GameObject.getGameObjects().forEach(g->g.onDestruction(new DestroyEvent(g)));
+        for (GameObject gameObject : GameObject.getGameObjects()) {
+                getVariables().saveVariables(gameObject);
+        }
+        getVariables().save();
         GameObject.getGameObjects().clear();
         exitAction.run();
+        if (closeGame) {
+            frame.dispose();
+            System.exit(0);
+        }
     }
 
     protected void launchGame(Class<? extends Game> game) {
@@ -358,6 +379,8 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         });
         exit();
     }
+
+    abstract protected GameVariables initVariables();
 
     /**
      * Will get called when the Game is initialised right before the gameLoop gets started (before the first game tick)

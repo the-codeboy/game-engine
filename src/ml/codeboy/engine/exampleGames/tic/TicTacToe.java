@@ -1,6 +1,7 @@
 package ml.codeboy.engine.exampleGames.tic;
 
 import ml.codeboy.engine.Game;
+import ml.codeboy.engine.Saving.GameVariables;
 import ml.codeboy.engine.UI.Button;
 import ml.codeboy.engine.UI.constraints.HeightConstraint;
 import ml.codeboy.engine.UI.constraints.WidthConstraint;
@@ -14,6 +15,11 @@ public class TicTacToe extends Game {
 
     public TicTacToe() {
         super("TicTacToe", new Dimension(500, 500));
+    }
+
+    @Override
+    protected GameVariables initVariables() {
+        return GameVariables.loadFromFile("./TicTacToe.save");
     }
 
     @Override

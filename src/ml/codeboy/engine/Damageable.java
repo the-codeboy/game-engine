@@ -1,9 +1,13 @@
 package ml.codeboy.engine;
 
+import ml.codeboy.engine.Saving.SaveValue;
+
 public class Damageable extends GameObject {
 
-
+    @SaveValue
     private int dmg = 1;
+
+    @SaveValue
     private int lives = 1;
 
     //<editor-fold desc="constructors">

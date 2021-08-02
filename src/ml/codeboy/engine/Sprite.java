@@ -1,5 +1,6 @@
 package ml.codeboy.engine;
 
+import ml.codeboy.engine.Saving.SaveValue;
 import ml.codeboy.engine.UI.UIObject;
 import ml.codeboy.engine.animation.Animation;
 import ml.codeboy.engine.events.DestroyEvent;
@@ -33,6 +34,7 @@ public class Sprite implements Comparable<Sprite> {
     protected Game game;
     int width, height;
     private BufferedImage image;
+    @SaveValue
     private double x, y;
     private SpriteType type = SpriteType.Image;
     private boolean isDestroyed = false;
