@@ -9,7 +9,7 @@ public class GameVariables implements Serializable {
 
     private HashMap<String, Object> variables = new HashMap<>();
 
-    public Object addVariable(String key, Object value) {
+    public Object putVariable(String key, Object value) {
         return variables.put(key, value);
     }
 
@@ -28,21 +28,21 @@ public class GameVariables implements Serializable {
     public Integer getIntVariable(String key){
         Object obj=getVariable(key);
         if(obj instanceof Integer)
-            return (Integer) getVariable(key);
+            return (Integer) obj;
         return null;
     }
 
     public Boolean getBoolVariable(String key){
         Object obj=getVariable(key);
         if(obj instanceof Boolean)
-            return (Boolean) getVariable(key);
+            return (Boolean) obj;
         return null;
     }
 
     public String getStringVariable(String key){
         Object obj=getVariable(key);
         if(obj instanceof String)
-            return (String) getVariable(key);
+            return (String) obj;
         return null;
     }
 
