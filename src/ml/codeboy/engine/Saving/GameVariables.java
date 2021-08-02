@@ -29,12 +29,18 @@ public class GameVariables implements Serializable {
         if (clazz.isAnnotationPresent(SaveClass.class)) {
             String classKey = clazz.getName();
             Class<?> current = clazz;
-            while (current.getSuperclass() != null) {
+            do {
+                boolean saveAll = current.isAnnotationPresent(SaveAll.class);
                 for (Field field : current.getDeclaredFields()) {
                     field.setAccessible(true);
+                    String key = null;
                     if (field.isAnnotationPresent(SaveValue.class)) {
+                        key = field.getAnnotation(SaveValue.class).key();
+                    } else if ((saveAll && !field.isAnnotationPresent(ExcludeValue.class))) {
+                        key = field.getName();
+                    }
+                    if (key != null) {
                         try {
-                            String key = field.getAnnotation(SaveValue.class).key();
                             if (key.isEmpty()) {
                                 key = field.getName();
                             }
@@ -48,7 +54,7 @@ public class GameVariables implements Serializable {
                     }
                 }
                 current = current.getSuperclass();
-            }
+            } while (current.getSuperclass() != null);
         }
     }
 
@@ -59,60 +65,31 @@ public class GameVariables implements Serializable {
         if (clazz.isAnnotationPresent(SaveClass.class)) {
             String classKey = clazz.getName();
             Class<?> current = clazz;
-            while (current.getSuperclass() != null) {
+            do {
+                boolean saveAll = current.isAnnotationPresent(SaveAll.class);
                 for (Field field : current.getDeclaredFields()) {
                     field.setAccessible(true);
+                    String key = null;
                     if (field.isAnnotationPresent(SaveValue.class)) {
-                        String key = field.getAnnotation(SaveValue.class).key();
+                        key = field.getAnnotation(SaveValue.class).key();
+                    } else if ((saveAll && !field.isAnnotationPresent(ExcludeValue.class))) {
+                        key = field.getName();
+                    }
+                    if (key != null && variables.containsKey(classKey) && variables.get(classKey).containsKey(key)) {
                         if (key.isEmpty()) {
                             key = field.getName();
                         }
-                        if (variables.containsKey(classKey) && variables.get(classKey).containsKey(key)) {
-                            try {
-                                field.set(object, variables.get(classKey).get(key));
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            }
+                        try {
+                            field.set(object, variables.get(classKey).get(key));
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
                         }
                     }
                 }
                 current = current.getSuperclass();
-            }
+            } while (current.getSuperclass() != null);
         }
     }
-
-    public Object getVariable(String key) {
-        return variables.get(key);
-    }
-
-    public void clearVariables() {
-        variables.clear();
-    }
-
-//    public boolean containsVariable(String key) {
-//        return variables.containsKey(key);
-//    }
-
-//    public Integer getIntVariable(String key) {
-//        Object obj = getVariable(key);
-//        if (obj instanceof Integer)
-//            return (Integer) obj;
-//        return null;
-//    }
-//
-//    public Boolean getBoolVariable(String key) {
-//        Object obj = getVariable(key);
-//        if (obj instanceof Boolean)
-//            return (Boolean) obj;
-//        return null;
-//    }
-//
-//    public String getStringVariable(String key) {
-//        Object obj = getVariable(key);
-//        if (obj instanceof String)
-//            return (String) obj;
-//        return null;
-//    }
 
     public static GameVariables loadFromFile(String path) {
         try {
