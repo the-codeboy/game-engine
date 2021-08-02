@@ -1,6 +1,7 @@
 package ml.codeboy.engine;
 
 import com.sun.istack.internal.Nullable;
+import ml.codeboy.engine.Saving.GameVariables;
 import ml.codeboy.engine.UI.UITheme;
 
 import javax.swing.*;
@@ -42,6 +43,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     private boolean isPaused = false;
     private boolean isGameOver = false;
     private boolean initialised;
+    private GameVariables variables;
 
     /**
      * @param name the name of the new Game
@@ -271,6 +273,18 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
 
     }
 
+    public GameVariables getVariables() {
+        if(variables==null)
+            variables=new GameVariables();
+        return variables;
+    }
+
+    public void setVariables(GameVariables variables) {
+        if(variables==null)
+            throw new IllegalArgumentException("GameVariables can not be null");
+        this.variables = variables;
+    }
+
     /**
      * creates the window for the Game and initialises listeners - also starts the gameLoop
      */
@@ -302,6 +316,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
             getFrame().dispose();
             throw new IllegalStateException("Game not initialised");
         }
+        variables = new GameVariables();
         Thread gameThread = new Thread(this::startGameLoop);
         gameThread.start();
     }

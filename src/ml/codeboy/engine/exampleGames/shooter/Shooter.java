@@ -1,6 +1,7 @@
 package ml.codeboy.engine.exampleGames.shooter;
 
 import ml.codeboy.engine.*;
+import ml.codeboy.engine.Saving.GameVariables;
 import ml.codeboy.engine.UI.Button;
 import ml.codeboy.engine.exampleGames.menu.Menu;
 import ml.codeboy.engine.exampleGames.shooter.GameObjects.Enemy;
@@ -33,6 +34,7 @@ public class Shooter extends Game {
 
     @Override
     protected void initialise() {
+        setVariables(GameVariables.loadFromFile("./shooter.save"));
         player = new Player(this);
         getScheduler().scheduleTask(this::initUpgrades, 0);
         spawnerTask = new Task(getScheduler()) {
@@ -42,7 +44,7 @@ public class Shooter extends Game {
             protected void initialise() {
                 period = 10;
                 start();
-                getScheduler().scheduleTask(this::run, 0);
+                getScheduler().scheduleTask(this, 0);
             }
 
             @Override
@@ -62,9 +64,7 @@ public class Shooter extends Game {
         pause.setPosition(getWidth() - 50, 50);
         pause.setSize(30);
 
-        Button back = new Button("back", () -> {
-            launchGame(Menu.class);
-        });
+        Button back = new Button("back", () -> launchGame(Menu.class));
         back.setTheme(theme);
         back.setPosition(getWidth() - 200, 50);
         back.setSize(30);
@@ -170,6 +170,8 @@ public class Shooter extends Game {
 
     @Override
     protected void exit() {
+        player.saveVariables();
+        getVariables().saveToFile("./shooter.save");
         super.exit();
     }
 
