@@ -274,6 +274,8 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     }
 
     public GameVariables getVariables() {
+        if(variables==null)
+            variables=new GameVariables();
         return variables;
     }
 
