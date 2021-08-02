@@ -3,6 +3,8 @@ package ml.codeboy.engine.exampleGames.shooter.GameObjects;
 import ml.codeboy.engine.Damageable;
 import ml.codeboy.engine.Game;
 import ml.codeboy.engine.GameObject;
+import ml.codeboy.engine.Saving.ExcludeValue;
+import ml.codeboy.engine.Saving.SaveAll;
 import ml.codeboy.engine.Saving.SaveValue;
 import ml.codeboy.engine.Saving.SaveClass;
 import ml.codeboy.engine.UI.Button;
@@ -11,27 +13,22 @@ import ml.codeboy.engine.events.DestroyEvent;
 import java.awt.*;
 
 @SaveClass
+@SaveAll
 public class Player extends Damageable {
+    @ExcludeValue
     private static Player player;
+    @ExcludeValue
     double xDir = 0, yDir = 0;
+
     int length = 10;
-    @SaveValue
     int piercing = 1;
-    @SaveValue
     public int maxAmmo = 50;
-    @SaveValue
     double ammo = maxAmmo;
-    @SaveValue
     double cooldown, maxCooldown = 0.2;
-    @SaveValue
     private int coins = 10;
-    @SaveValue
     private double bulletSpeed = 10;
-    @SaveValue
     private double reloadSpeed = 1;
-    @SaveValue
     private int bulletSize = 4;
-    @SaveValue
     private int bullets = 1;
 
     public Player(Game game) {
