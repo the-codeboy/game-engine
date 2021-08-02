@@ -1,5 +1,6 @@
 package ml.codeboy.engine;
 
+import ml.codeboy.engine.Saving.GameVariables;
 import ml.codeboy.engine.UI.ButtonGroup;
 import ml.codeboy.engine.UI.UIText;
 import ml.codeboy.engine.UI.UITheme;
@@ -14,6 +15,11 @@ public class TitleScreen extends Game {
 
     public TitleScreen(String name, UITheme theme) {
         super(name, theme);
+    }
+
+    @Override
+    protected GameVariables initVariables() {
+        return GameVariables.loadFromFile("titleScreen.save");
     }
 
     @Override

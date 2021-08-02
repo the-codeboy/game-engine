@@ -170,9 +170,12 @@ public class Shooter extends Game {
 
     @Override
     protected void exit() {
-        player.saveVariables();
-        getVariables().saveToFile("./shooter.save");
         super.exit();
+    }
+
+    @Override
+    protected GameVariables initVariables() {
+        return GameVariables.loadFromFile("./shooter.save");
     }
 
     @Override

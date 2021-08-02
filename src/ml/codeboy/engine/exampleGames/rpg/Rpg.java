@@ -1,6 +1,7 @@
 package ml.codeboy.engine.exampleGames.rpg;
 
 import ml.codeboy.engine.Game;
+import ml.codeboy.engine.Saving.GameVariables;
 import ml.codeboy.engine.exampleGames.rpg.Dialogs.Interaction;
 import ml.codeboy.engine.exampleGames.rpg.GameObjects.Item;
 import ml.codeboy.engine.exampleGames.rpg.GameObjects.NPC;
@@ -25,6 +26,11 @@ public class Rpg extends Game {
 
     public void closeDialog() {
         interaction = null;
+    }
+
+    @Override
+    protected GameVariables initVariables() {
+        return GameVariables.loadFromFile("rpg.save");
     }
 
     @Override
