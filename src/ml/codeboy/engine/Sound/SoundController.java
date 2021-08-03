@@ -60,4 +60,12 @@ public class SoundController {
     public SoundStatus getStatus() {
         return status;
     }
+
+    public void addVolume(float value) {
+        if(queue.size()>0){
+            if (queue.get(0).getStatus() == SoundStatus.PLAYING) {
+                queue.get(0).addVolume(value);
+            }
+        }
+    }
 }

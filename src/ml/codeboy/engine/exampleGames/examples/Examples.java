@@ -19,6 +19,8 @@ public class Examples extends TitleScreen {
         addButton("Play", () -> SoundController.getInstance().play());
         addButton("Pause", () -> SoundController.getInstance().pause());
         addButton("Toggle", () -> SoundController.getInstance().toggle());
+        addButton("Vol+", () -> SoundController.getInstance().addVolume(2));
+        addButton("Vol-", () -> SoundController.getInstance().addVolume(-2));
     }
 
 }

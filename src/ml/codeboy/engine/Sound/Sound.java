@@ -93,4 +93,13 @@ public class Sound {
     public SoundStatus getStatus(){
         return status;
     }
+
+    public void addVolume(float value) {
+        float newValue=gainControl.getValue()+value;
+        try{
+            gainControl.setValue(newValue);
+        }catch (IllegalArgumentException e){
+            e.printStackTrace();
+        }
+    }
 }
