@@ -4,6 +4,10 @@ import ml.codeboy.engine.Saving.GameVariables;
 import ml.codeboy.engine.UI.ButtonGroup;
 import ml.codeboy.engine.UI.UIText;
 import ml.codeboy.engine.UI.UITheme;
+import ml.codeboy.engine.UI.constraints.HeightConstraint;
+import ml.codeboy.engine.UI.constraints.UIConstraint;
+import ml.codeboy.engine.UI.constraints.WidthConstraint;
+import ml.codeboy.engine.UI.constraints.YConstraint;
 
 public class TitleScreen extends Game {
     protected UIText title;
@@ -21,6 +25,10 @@ public class TitleScreen extends Game {
     @Override
     protected void initialise() {
         group = new ButtonGroup(getWidth() / 2, (int) (getHeight() * 0.7), getWidth() / 4, getHeight() / 2, group);
+        group.addConstraint(UIConstraint.CENTER_HORIZONTALLY).
+                addConstraint(new YConstraint(0.7)).
+                addConstraint(new WidthConstraint(0.25)).
+                addConstraint(new HeightConstraint(0.5));
         addTitle();
         setInitialised();
     }

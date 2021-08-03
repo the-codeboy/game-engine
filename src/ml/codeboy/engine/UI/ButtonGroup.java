@@ -84,6 +84,12 @@ public class ButtonGroup extends UIObject implements Iterable<Button> {
     }
 
     @Override
+    public void recalculate() {
+        super.recalculate();
+        recalculateValues();
+    }
+
+    @Override
     public UIObject setTheme(UITheme theme) {
         super.setTheme(theme);
         if (buttons != null)
