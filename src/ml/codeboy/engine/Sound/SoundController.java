@@ -22,14 +22,14 @@ public class SoundController {
     }
 
     public void addToQueue(String path) {
-        Thread loadingThread = new Thread(() -> queue.add(new Sound(path)));
+        Thread loadingThread = new Thread(() -> queue.add(new Sound(path, () -> SoundController.getInstance().finishedPlaying())));
         loadingThread.start();
     }
 
-    public void finishedPlaying(Sound sound) {
-        if(loop)
-            queue.add(sound);
-        queue.remove(sound);
+    protected void finishedPlaying() {
+        if (loop)
+            queue.add(queue.get(0));
+        queue.remove(0);
         play();
     }
 
@@ -49,7 +49,7 @@ public class SoundController {
     }
 
     public void pause() {
-        if(queue.size()>0) {
+        if (queue.size() > 0) {
             if (queue.get(0).getStatus() == SoundStatus.PLAYING) {
                 queue.get(0).pause();
                 this.status = SoundStatus.READY;
@@ -62,7 +62,7 @@ public class SoundController {
     }
 
     public void addVolume(float value) {
-        if(queue.size()>0){
+        if (queue.size() > 0) {
             if (queue.get(0).getStatus() == SoundStatus.PLAYING) {
                 queue.get(0).addVolume(value);
             }

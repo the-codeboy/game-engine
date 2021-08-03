@@ -10,8 +10,31 @@ public class Sound {
     private SoundStatus status = SoundStatus.LOADING;
     private Clip clip;
     private FloatControl gainControl;
+    private Runnable runAfter=()->{};
 
-    protected Sound(String path) {
+    public Sound(String path) {
+        File file=new File(path);
+        if (file.exists()) {
+            init(file);
+            return;
+        } else {
+            InputStream stream = getClass().getResourceAsStream("/Sounds/" + path);
+            if (stream != null) {
+                init(stream);
+                return;
+            } else {
+                stream = getClass().getResourceAsStream(path);
+                if (stream != null) {
+                    init(stream);
+                    return;
+                }
+            }
+        }
+        throw new IllegalArgumentException("File must exist");
+    }
+
+    public Sound(String path,Runnable runAfter) {
+        this.runAfter=runAfter;
         File file=new File(path);
         if (file.exists()) {
             init(file);
@@ -76,7 +99,7 @@ public class Sound {
                 if(event.getType()==LineEvent.Type.STOP){
                     if(clip.getMicrosecondPosition()==clip.getMicrosecondLength()) {
                         status = SoundStatus.STOPPED;
-                        SoundController.getInstance().finishedPlaying(this);
+                        runAfter.run();
                     }else{
                         status = SoundStatus.PAUSED;
                     }
