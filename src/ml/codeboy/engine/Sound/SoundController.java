@@ -22,7 +22,7 @@ public class SoundController {
     }
 
     public void addToQueue(String path) {
-        Thread loadingThread = new Thread(() -> queue.add(new Sound(path, () -> SoundController.getInstance().finishedPlaying())));
+        Thread loadingThread = new Thread(() -> queue.add(Sound.createSound(path, () -> SoundController.getInstance().finishedPlaying())));
         loadingThread.start();
     }
 
