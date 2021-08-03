@@ -4,71 +4,53 @@ import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 
 public class Sound {
 
-    private static final HashMap<String, Sound> cache = new HashMap<>();
-
     private SoundStatus status = SoundStatus.LOADING;
+    private String path;
     private Clip clip;
     private FloatControl gainControl;
     private Runnable runAfter;
+    private Runnable runBefore;
     private float gainStartValue;
 
-    public static Sound createSound(String path) {
-        return createSound(path, () -> {
+    private boolean useCache;
+
+    public Sound(Sound sound){
+        this(sound.path, sound.clip,sound.runAfter);
+    }
+
+    public Sound(String path, Clip clip) {
+        this(path, clip, () -> {
         });
     }
 
-    public static Sound createSound(String path, Runnable runAfter) {
-        return createSound(path, runAfter, true);
-    }
-
-    public static Sound createSound(String path, Runnable runAfter, boolean useCache) {
-        if (cache.containsKey(path)) {
-            Sound sound = cache.get(path);
-            if (sound.status == SoundStatus.STOPPED || sound.status == SoundStatus.READY) {
-                sound.reset();
-                sound.runAfter = runAfter;
-                return sound;
-            }
-        }
-        return new Sound(path, runAfter, useCache);
-    }
-
-    private Sound reset() {
-        clip.setMicrosecondPosition(0);
-        gainControl.setValue(gainStartValue);
-        return this;
-    }
-
-    private Sound(String path, Runnable runAfter, boolean useCache) {
+    public Sound(String path, Clip clip, Runnable runAfter) {
+        this.path=path;
+        this.clip = clip;
         this.runAfter = runAfter;
         File file = new File(path);
         if (file.exists()) {
-            init(file);
+            runBefore = () -> init(file);
         } else {
             InputStream stream = getClass().getResourceAsStream("/Sounds/" + path);
             if (stream != null) {
-                init(stream);
+                InputStream finalStream = stream;
+                runBefore = () -> init(finalStream);
             } else {
                 stream = getClass().getResourceAsStream(path);
                 if (stream != null) {
-                    init(stream);
+                    InputStream finalStream1 = stream;
+                    runBefore = () -> init(finalStream1);
                 } else {
                     throw new IllegalArgumentException("File must exist");
                 }
             }
         }
-        if (useCache) {
-            cache.put(path, this);
-        }
     }
 
-
     private void init(File file) {
-        init();
         try {
             AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
             clip.open(inputStream);
@@ -79,22 +61,15 @@ public class Sound {
     }
 
     private void init(InputStream stream) {
-        init();
         try {
             AudioInputStream inputStream = AudioSystem.getAudioInputStream(stream);
+            clip.stop();
+            clip.close();
             clip.open(inputStream);
         } catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
             e.printStackTrace();
         }
         postInit();
-    }
-
-    private void init() {
-        try {
-            clip = AudioSystem.getClip();
-        } catch (LineUnavailableException e) {
-            e.printStackTrace();
-        }
     }
 
     private void postInit() {
@@ -104,10 +79,13 @@ public class Sound {
     }
 
     public void play() {
-        if (status == SoundStatus.READY || status == SoundStatus.PAUSED) {
+        if (status == SoundStatus.LOADING || status == SoundStatus.PAUSED) {
+            if (status == SoundStatus.LOADING)
+                runBefore.run();
             status = SoundStatus.PLAYING;
             clip.start();
             clip.addLineListener(event -> {
+                System.out.println(event.getType());
                 if (event.getType() == LineEvent.Type.STOP) {
                     if (clip.getMicrosecondPosition() == clip.getMicrosecondLength()) {
                         status = SoundStatus.STOPPED;
@@ -137,5 +115,13 @@ public class Sound {
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
+    }
+
+    public void stop() {
+        clip.setMicrosecondPosition(clip.getMicrosecondLength());
+    }
+
+    public void setStatus(SoundStatus status) {
+        this.status = status;
     }
 }
