@@ -12,8 +12,9 @@ public class Sound {
     private FloatControl gainControl;
 
     protected Sound(String path) {
-        if (new File(path).exists()) {
-            init(new File(path));
+        File file=new File(path);
+        if (file.exists()) {
+            init(file);
             return;
         } else {
             InputStream stream = getClass().getResourceAsStream("/Sounds/" + path);
