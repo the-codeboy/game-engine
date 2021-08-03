@@ -50,8 +50,9 @@ public class SoundController {
 
     public void pause() {
         if (queue.size() > 0) {
-            if (queue.get(0).getStatus() == SoundStatus.PLAYING) {
-                queue.get(0).pause();
+            Sound sound = queue.get(0);
+            if (sound.getStatus() == SoundStatus.PLAYING) {
+                sound.pause();
                 this.status = SoundStatus.READY;
             }
         }
