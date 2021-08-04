@@ -131,7 +131,7 @@ public class Sound {
     }
 
     public void addVolume(float value) {
-        float newValue = gainControl.getValue() + value;
+        float newValue = Math.min(gainControl.getValue() + value, gainControl.getMaximum());
         try {
             gainControl.setValue(newValue);
         } catch (IllegalArgumentException e) {
