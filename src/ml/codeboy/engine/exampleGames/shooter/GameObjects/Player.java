@@ -74,7 +74,7 @@ public class Player extends Damageable {
         game.setGameOver(true);
         Button button = new Button("restart", game::restart);
         button.setPosition(game.getMiddleOfWindow());
-        button.setWidthAndHeight(game.getMiddleOfWindow().x / 4, game.getMiddleOfWindow().y / 4);
+        button.setWidthAndHeight( game.getMiddleOfWindow().getX() / 4, game.getMiddleOfWindow().getY() / 4);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class Player extends Damageable {
 
     @Override
     protected void tick() {
-        double vectorlength = getMousePosition().distance(getPosition());
+        double vectorlength = getPosition().distance(getMousePosition());
         xDir = (length * (getMouseX() - getX()) / vectorlength);
         yDir = (length * (getMouseY() - getY()) / vectorlength);
         if (isMouseDown()) {

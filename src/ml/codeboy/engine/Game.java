@@ -191,8 +191,8 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         return camera;
     }
 
-    public Point getCameraPosition() {
-        return camera != null ? camera.getPosition() : new Point();
+    public Vector getCameraPosition() {
+        return camera != null ? camera.getPosition() : new Vector();
     }
 
     public UITheme getTheme() {
@@ -226,8 +226,8 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         return scheduler;
     }
 
-    public Point getMiddleOfWindow() {
-        return new Point(getFrame().getWidth() / 2, getFrame().getHeight() / 2);
+    public Vector getMiddleOfWindow() {
+        return new Vector(getFrame().getWidth() / 2d, getFrame().getHeight() / 2d);
     }
 
     Graphics2D getGraphics() {

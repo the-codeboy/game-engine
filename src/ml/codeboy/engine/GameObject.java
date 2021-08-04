@@ -15,7 +15,7 @@ public class GameObject extends Sprite {
     protected Game game;
     protected double deltaTime = 0;
     private boolean initialised = false;
-    private Point target = null, startingPos;
+    private Vector target = null, startingPos;
     private double timeLeft = 0;
     private double nextPhysicsUpdate = Math.random(), physicsUpdateEvery = 0.5;
     private boolean isPhysicsTick = false;
@@ -104,15 +104,11 @@ public class GameObject extends Sprite {
         gameObjects.remove(this);
     }
 
-    public Point getPosition() {
-        return new Point(getX(), getY());
-    }
-
     /**
      * @param point position to move to (this might never be reached)
      * @param when  the time in seconds it will take to get there
      */
-    public void moveTo(Point point, double when) {
+    public void moveTo(Vector point, double when) {
         target = point;
         startingPos = getPosition();
         this.timeLeft = when;

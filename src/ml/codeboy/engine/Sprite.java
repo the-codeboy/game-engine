@@ -417,14 +417,14 @@ public class Sprite implements Comparable<Sprite> {
     /**
      * returns the Position as a Point
      */
-    public Point getPosition() {
-        return new Point(getX(), getY());
+    public Vector getPosition() {
+        return new Vector(getXDouble(), getYDouble());
     }
 
     /**
      * @param position the new position of this Sprite as a Point object
      */
-    public void setPosition(Point position) {
+    public void setPosition(Vector position) {
         setX(position.getX());
         setY(position.getY());
     }

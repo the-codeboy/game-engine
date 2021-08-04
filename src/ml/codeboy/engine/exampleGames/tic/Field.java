@@ -97,7 +97,7 @@ public class Field extends UIObject {
             currentPlayer = currentPlayer.getNext();
             if (getWinner() != TicPlayer.EMPTY) {
                 winnerText = new UIText(getWinner().toString().toUpperCase() + " won!");
-                winnerText.setPosition(game.getMiddleOfWindow().x, game.getMiddleOfWindow().y);
+                winnerText.setPosition(game.getMiddleOfWindow().getX(), game.getMiddleOfWindow().getY());
                 winnerText.setWidthAndHeight((int) (getWidth() * 0.2), (int) (getHeight() * 0.1));
                 winnerText.setTextColor(game.getTheme().getTextColor());
                 currentPlayer = TicPlayer.EMPTY;
