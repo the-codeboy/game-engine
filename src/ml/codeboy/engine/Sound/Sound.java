@@ -109,11 +109,10 @@ public class Sound {
     }
 
     public void addVolume(float value) {
-        float newValue = Math.min(gainControl.getValue() + value, gainControl.getMaximum());
+        float newValue = Math.max(gainControl.getMinimum(),Math.min(gainControl.getValue() + value, gainControl.getMaximum()));
         try {
             gainControl.setValue(newValue);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+        } catch (IllegalArgumentException ignored) { // Should not happen thanks to Math.max(Math.min())
         }
     }
 
