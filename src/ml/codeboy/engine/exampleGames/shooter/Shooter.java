@@ -182,6 +182,6 @@ public class Shooter extends Game {
 
     @Override
     protected void displayStats(String[] toDisplay) {
-        super.displayStats(new String[]{"FPS: " + getCurrentFPS(), "Ammo: " + player.getAmmo(), "Coins: " + player.getCoins(), "Lives: " + player.getLives()});
+        super.displayStats(new String[]{"FPS: " + getAverageFPS(), "Ammo: " + player.getAmmo(), "Coins: " + player.getCoins(), "Lives: " + player.getLives()});
     }
 }
