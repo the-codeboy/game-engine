@@ -96,7 +96,7 @@ public class SoundController {
         if (this.status == SoundStatus.FAILED)
             throw new IllegalStateException("Could not initialise SoundController");
         Sound finished = queue.remove(0);
-        if (loop) {
+        if (loop && finished.getStatus()!=SoundStatus.FAILED) {
             queue.add(new Sound(finished));
         }
         status = SoundStatus.READY;
@@ -107,8 +107,13 @@ public class SoundController {
         if (this.status == SoundStatus.FAILED)
             throw new IllegalStateException("Could not initialise SoundController");
         if (status == SoundStatus.READY && queue.size() > 0) {
-            status = SoundStatus.PLAYING;
-            queue.get(0).play();
+            Sound sound=queue.get(0);
+            if(sound.getStatus().isPlayable()) {
+                status = SoundStatus.PLAYING;
+                queue.get(0).play();
+            }else if(sound.getStatus()==SoundStatus.PLAYING){
+                status=SoundStatus.PLAYING;
+            }
         }
     }
 

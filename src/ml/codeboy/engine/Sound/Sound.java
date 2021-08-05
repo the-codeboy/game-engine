@@ -15,10 +15,10 @@ public class Sound {
     private Runnable runBefore;
     private float gainStartValue;
 
-    private boolean useCache;
+    private AudioFormat format;
 
-    public Sound(Sound sound){
-        this(sound.path, sound.clip,sound.runAfter);
+    public Sound(Sound sound) {
+        this(sound.path, sound.clip, sound.runAfter);
     }
 
     public Sound(String path, Clip clip) {
@@ -27,22 +27,22 @@ public class Sound {
     }
 
     public Sound(String path, Clip clip, Runnable runAfter) {
-        this.path=path;
+        this.path = path;
         this.clip = clip;
         this.runAfter = runAfter;
         File file = new File(path);
         if (file.exists()) {
-            runBefore = () -> init(file);
+            runBefore = () -> init(getInputStream(file));
         } else {
             InputStream stream = getClass().getResourceAsStream("/Sounds/" + path);
             if (stream != null) {
                 InputStream finalStream = stream;
-                runBefore = () -> init(finalStream);
+                runBefore = () -> init(getInputStream(finalStream));
             } else {
                 stream = getClass().getResourceAsStream(path);
                 if (stream != null) {
                     InputStream finalStream1 = stream;
-                    runBefore = () -> init(finalStream1);
+                    runBefore = () -> init(getInputStream(finalStream1));
                 } else {
                     throw new IllegalArgumentException("File must exist");
                 }
@@ -50,35 +50,52 @@ public class Sound {
         }
     }
 
-    private void init(File file) {
+    private AudioInputStream getInputStream(File file) {
         try {
-            AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
-            clip.open(inputStream);
-        } catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
+            return AudioSystem.getAudioInputStream(file);
+        } catch (UnsupportedAudioFileException | IOException e) {
             e.printStackTrace();
         }
-        postInit();
+        return null;
     }
 
-    private void init(InputStream stream) {
+    private AudioInputStream getInputStream(InputStream stream) {
         try {
-            AudioInputStream inputStream = AudioSystem.getAudioInputStream(stream);
-            clip.stop();
-            clip.close();
-            clip.open(inputStream);
-        } catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
+            return AudioSystem.getAudioInputStream(stream);
+        } catch (UnsupportedAudioFileException | IOException e) {
             e.printStackTrace();
         }
-        postInit();
+        return null;
     }
 
-    private void postInit() {
-        this.gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-        gainStartValue = gainControl.getValue();
-        status = SoundStatus.READY;
+
+    private void init(AudioInputStream audioStream) {
+        try {
+            if (audioStream == null) {
+                status = SoundStatus.FAILED;
+                System.err.println("Error");
+                runAfter.run();
+                return;
+            }
+            if (clip.isRunning()) {
+                clip.stop();
+            }
+            if (clip.isOpen()) {
+                clip.close();
+            }
+            clip.open(audioStream);
+            format = audioStream.getFormat();
+            gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainStartValue = gainControl.getValue();
+        } catch (LineUnavailableException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void play() {
+        if (status == SoundStatus.FAILED) {
+            throw new IllegalStateException("Can not run song which was not loaded properly");
+        }
         if (status == SoundStatus.LOADING || status == SoundStatus.PAUSED) {
             if (status == SoundStatus.LOADING)
                 runBefore.run();
@@ -109,7 +126,7 @@ public class Sound {
     }
 
     public void addVolume(float value) {
-        float newValue = Math.max(gainControl.getMinimum(),Math.min(gainControl.getValue() + value, gainControl.getMaximum()));
+        float newValue = Math.max(gainControl.getMinimum(), Math.min(gainControl.getValue() + value, gainControl.getMaximum()));
         try {
             gainControl.setValue(newValue);
         } catch (IllegalArgumentException ignored) { // Should not happen thanks to Math.max(Math.min())
@@ -118,6 +135,10 @@ public class Sound {
 
     public void stop() {
         clip.setMicrosecondPosition(clip.getMicrosecondLength());
+    }
+
+    public AudioFormat getFormat() {
+        return format;
     }
 
     public void setStatus(SoundStatus status) {
