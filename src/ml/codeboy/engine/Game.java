@@ -453,8 +453,8 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
             }
             lastFrame = tickStartTime;
             deltaSeconds = deltaTime / 1000000000;
+            FPS = (int) (1000000000 / deltaTime);
             if ((tickStartTime - lastStatsUpdate) > 1000000000) {
-                FPS = (int) (1000000000 / deltaTime);
                 lastStatsUpdate = tickStartTime;
                 average_fps /= numberOfCycles;
                 average_gameLogic /= numberOfCycles;
@@ -755,6 +755,10 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         if(gui)
             return getFrame().getHeight();
         return preferredDimension.height;
+    }
+
+    public double getAverageFPS() {
+        return ((int)(100*average_fps/numberOfCycles))/100d;
     }
 
     /**
