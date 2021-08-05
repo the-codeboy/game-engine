@@ -18,7 +18,7 @@ public abstract class Upgrade {
         upgrades++;
         this.name = name;
         button = new Button(name + " cost: " + cost + " current level " + level, this::tryBuy);
-        button.setPosition(game.getFrame().getWidth() - 150, game.getFrame().getHeight() - 70 * upgrades);
+        button.setPosition(game.getWidth() - 150, game.getHeight() - 70 * upgrades);
         button.setWidthAndHeight(200, 50);
     }
 

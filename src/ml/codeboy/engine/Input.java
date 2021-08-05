@@ -3,6 +3,7 @@ package ml.codeboy.engine;
 import ml.codeboy.engine.UI.UIObject;
 import ml.codeboy.engine.exampleGames.shooter.Shooter;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.HashMap;
@@ -21,8 +22,12 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
     public static Point getMousePosition() {
         //return MouseInfo.getPointerInfo().getLocation();
         Point position = null;
-        if (Game.get() != null)
-            position = Game.get().getFrame().getMousePosition();
+        Game game=Game.get();
+        if (game != null) {
+            JFrame frame=game.getFrame();
+            if(frame!=null)
+                position = frame.getMousePosition();
+        }
         return position == null ? new Point() : position;
     }
 

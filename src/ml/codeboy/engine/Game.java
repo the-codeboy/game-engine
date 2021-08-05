@@ -2,7 +2,6 @@ package ml.codeboy.engine;
 
 import com.sun.istack.internal.Nullable;
 import ml.codeboy.engine.Saving.GameVariables;
-import ml.codeboy.engine.Saving.SaveClass;
 import ml.codeboy.engine.UI.UITheme;
 
 import javax.swing.*;
@@ -13,8 +12,15 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.Optional;
 
 public abstract class Game implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener, ComponentListener {
+
+    private static boolean gui=!GraphicsEnvironment.isHeadless();
+
+    public static void setGui(boolean gui){
+        Game.gui=gui;
+    }
 
     private static JFrame frame;
     private static Game instance;
@@ -227,7 +233,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     }
 
     public Vector getMiddleOfWindow() {
-        return new Vector(getFrame().getWidth() / 2d, getFrame().getHeight() / 2d);
+        return new Vector(getWidth() / 2d, getHeight() / 2d);
     }
 
     Graphics2D getGraphics() {
@@ -250,6 +256,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
      * @return the JFrame this Game is rendering to
      * might be removed in a future release but is still safe to use at the moment
      */
+    @Nullable
     public JFrame getFrame() {
         return frame;
     }
@@ -292,6 +299,26 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
      * creates the window for the Game and initialises listeners - also starts the gameLoop
      */
     private void init() {
+        if(gui)
+            initGui();
+        camera = new Camera(this);
+        camera.setLayer(Layer.INVISIBLE);
+        variables = initVariables();
+        if (variables == null)
+            throw new IllegalStateException("GameVariables can not be null");
+        initialised = false;
+        initialise();
+        if (!initialised) {
+            if(gui)
+                getFrame().dispose();
+            throw new IllegalStateException("Game not initialised");
+        }
+        Thread gameThread = new Thread(this::startGameLoop);
+        gameThread.start();
+    }
+
+    private void initGui(){
+
         newFrame();
         frame.getContentPane().addComponentListener(this);
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -319,19 +346,6 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         getFrame().setVisible(true);
 
         graphics = screen.createGraphics();
-        camera = new Camera(this);
-        camera.setLayer(Layer.INVISIBLE);
-        variables = initVariables();
-        if (variables == null)
-            throw new IllegalStateException("GameVariables can not be null");
-        initialised = false;
-        initialise();
-        if (!initialised) {
-            getFrame().dispose();
-            throw new IllegalStateException("Game not initialised");
-        }
-        Thread gameThread = new Thread(this::startGameLoop);
-        gameThread.start();
     }
 
     protected void exit() {
@@ -396,10 +410,15 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
      */
     protected void setInitialised() {
         if (initialised) {
-            getFrame().dispose();
+            if(gui)
+                getFrame().dispose();
             throw new IllegalStateException("Already initialised");
         }
         initialised = true;
+    }
+
+    protected final boolean isInitialised(){
+        return initialised;
     }
 
     /**
@@ -457,7 +476,8 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
                 tickStartTime = System.currentTimeMillis();
                 executeGameLogic();
                 gameLogic = System.currentTimeMillis() - tickStartTime;
-                render();
+                if(gui)
+                    render();
                 render = System.currentTimeMillis() - tickStartTime - gameLogic;
                 fullTick = System.currentTimeMillis() - tickStartTime;
             } catch (ConcurrentModificationException e) {
@@ -592,7 +612,8 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     }
 
     protected void setCursor(Cursor cursor) {
-        getFrame().setCursor(cursor);
+        if(getFrame()!=null)
+            getFrame().setCursor(cursor);
     }
 
     /**
@@ -700,14 +721,32 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
      * @return the width of the game - this value might change if the game is not in fullscreen mode
      */
     public int getWidth() {
-        return getFrame().getWidth();
+        if(gui)
+            return getFrame().getWidth();
+        return preferredDimension.width;
     }
 
     /**
      * @return the height of the game - this value might change if the game is not in fullscreen mode
      */
     public int getHeight() {
-        return getFrame().getHeight();
+        if(gui)
+            return getFrame().getHeight();
+        return preferredDimension.height;
+    }
+
+    /**
+     * @return the preferred width of the game - this value might not be the same as {@link Game#getWidth()}
+     */
+    public int getPreferredWidth() {
+        return preferredDimension.width;
+    }
+
+    /**
+     * @return the preferred height of the game - this value might not be the same as {@link Game#getHeight()} ()}
+     */
+    public int getPreferredHeight() {
+        return preferredDimension.height;
     }
 
     /**

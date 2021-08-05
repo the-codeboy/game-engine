@@ -38,8 +38,8 @@ public class Player extends Damageable {
         player = this;
         setWidth(10);
         setHeight(10);
-        setX((float) Game.get().getFrame().getWidth() / 2);
-        setY((float) Game.get().getFrame().getHeight() / 2);
+        setX((float) Game.get().getWidth() / 2);
+        setY((float) Game.get().getHeight() / 2);
         listenForCollision(Enemy.class);
         setLives(10);
     }

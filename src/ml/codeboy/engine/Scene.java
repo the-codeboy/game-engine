@@ -1,7 +1,9 @@
 package ml.codeboy.engine;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Optional;
 
 public class Scene {
     private final Game game;
@@ -31,6 +33,8 @@ public class Scene {
         graphics.setFont(graphics.getFont().deriveFont(20f));
         game.displayStats(new String[]{"FPS: " + game.getCurrentFPS()});
 
-        game.getFrame().getGraphics().drawImage(screen, 0, 0, game.getWidth(), game.getHeight(), null);
+        JFrame frame=game.getFrame();
+        if(frame!=null)
+            frame.getGraphics().drawImage(screen, 0, 0, game.getWidth(), game.getHeight(), null);
     }
 }

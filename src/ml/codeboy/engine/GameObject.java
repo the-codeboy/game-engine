@@ -81,18 +81,18 @@ public class GameObject extends Sprite {
         initialised = true;
     }
 
-    private void registerListeners() {
-        if (initialised)
-            return;
-        if (this instanceof MouseMotionListener)
-            Game.get().getFrame().addMouseMotionListener((MouseMotionListener) this);
-        if (this instanceof MouseWheelListener)
-            Game.get().getFrame().addMouseWheelListener((MouseWheelListener) this);
-        if (this instanceof MouseListener)
-            Game.get().getFrame().addMouseListener((MouseListener) this);
-        if (this instanceof KeyListener)
-            Game.get().getFrame().addKeyListener((KeyListener) this);
-    }
+//    private void registerListeners() {
+//        if (initialised)
+//            return;
+//        if (this instanceof MouseMotionListener)
+//            Game.get().getFrame().addMouseMotionListener((MouseMotionListener) this);
+//        if (this instanceof MouseWheelListener)
+//            Game.get().getFrame().addMouseWheelListener((MouseWheelListener) this);
+//        if (this instanceof MouseListener)
+//            Game.get().getFrame().addMouseListener((MouseListener) this);
+//        if (this instanceof KeyListener)
+//            Game.get().getFrame().addKeyListener((KeyListener) this);
+//    }
 
     public Game getGame() {
         return game;
