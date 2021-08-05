@@ -112,7 +112,8 @@ public class Shooter extends Game {
         button.setSize(30);
 
         unPause();
-        setInitialised();
+        if(!isInitialised())
+            setInitialised();
     }
 
     private void initUpgrades() {
@@ -170,6 +171,7 @@ public class Shooter extends Game {
 
     @Override
     protected void exit() {
+        Player.getPlayer().destroy();
         super.exit();
     }
 
