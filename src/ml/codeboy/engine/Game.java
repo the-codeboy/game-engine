@@ -51,6 +51,8 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     private boolean isGameOver = false;
     private boolean initialised;
     private GameVariables variables;
+    private int maxFPS=Integer.MAX_VALUE;
+    private long requiredDeltaTime=0;
 
     private boolean closeGame = false;
 
@@ -110,8 +112,6 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     }
 
     private static void newFrame() {
-        if (frame != null)
-            frame.dispose();
         frame = new JFrame();
         frame.addKeyListener(Input.getInstance());
         frame.addMouseListener(Input.getInstance());
@@ -144,6 +144,16 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     @Deprecated
     public static int getMouseY() {
         return MouseInfo.getPointerInfo().getLocation().y;
+    }
+
+    public int getMaxFPS() {
+        return maxFPS;
+    }
+
+    public void setMaxFPS(int maxFPS) {
+        this.maxFPS = maxFPS;
+        if(maxFPS>0)
+            requiredDeltaTime=1000000000/maxFPS;
     }
 
     /**
@@ -318,7 +328,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     }
 
     private void initGui(){
-
+        JFrame old=frame;
         newFrame();
         frame.getContentPane().addComponentListener(this);
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -346,6 +356,8 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         getFrame().setVisible(true);
 
         graphics = screen.createGraphics();
+        if (old != null)
+            old.dispose();
     }
 
     protected void exit() {
@@ -429,10 +441,20 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         while (!closed) {
             tickStartTime = System.nanoTime();
             double deltaTime = tickStartTime - lastFrame;
+            if(deltaTime<requiredDeltaTime){
+                try {
+                    long waitTime= (long) (requiredDeltaTime-deltaTime)/1000000;
+                    Thread.sleep(waitTime);
+                    tickStartTime = System.nanoTime();
+                    deltaTime = tickStartTime - lastFrame;
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             lastFrame = tickStartTime;
             deltaSeconds = deltaTime / 1000000000;
-            FPS = (int) (1000000000 / deltaTime);
             if ((tickStartTime - lastStatsUpdate) > 1000000000) {
+                FPS = (int) (1000000000 / deltaTime);
                 lastStatsUpdate = tickStartTime;
                 average_fps /= numberOfCycles;
                 average_gameLogic /= numberOfCycles;
