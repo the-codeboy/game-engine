@@ -17,7 +17,7 @@ public class GameObject extends Sprite {
     private boolean initialised = false;
     private Vector target = null, startingPos;
     private double timeLeft = 0;
-    private double nextPhysicsUpdate = Math.random(), physicsUpdateEvery = 0.5;
+    private double nextPhysicsUpdate = Math.random(), physicsUpdateEvery = 0;
     private boolean isPhysicsTick = false;
     private boolean hasCollision = true;
     private boolean listenForCollision = false;
@@ -189,7 +189,7 @@ public class GameObject extends Sprite {
         if (hasCollision && listenForCollision) {
             HashSet<GameObject> thisTickCollisions = new HashSet<>();
             for (GameObject other : gameObjects) {
-                if (other != null && other.getClass().isAssignableFrom(type) && other != this && other.collidesWith(this)) {
+                if (other != null && type.isAssignableFrom(other.getClass()) && other != this && other.collidesWith(this)) {
                     if (!lastTickCollisions.contains(other))
                         onCollision(other);
                     else
@@ -205,7 +205,7 @@ public class GameObject extends Sprite {
         return lastTickCollisions;
     }
 
-    private boolean collidesWith(GameObject other) {
+    public boolean collidesWith(GameObject other) {
         if (!hasCollision || !other.hasCollision)
             return false;
         if (getY() + getHeight() / 2 < other.getY() - other.getHeight() / 2
