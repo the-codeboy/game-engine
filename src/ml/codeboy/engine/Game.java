@@ -323,6 +323,12 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
                 getFrame().dispose();
             throw new IllegalStateException("Game not initialised");
         }
+        doNext(() -> {
+                    for (Layer layer : Layer.values())
+                        for (Sprite sprite : layer.getSprites())
+                            sprite.recalculate();
+                }
+        );
         Thread gameThread = new Thread(this::startGameLoop);
         gameThread.start();
     }
