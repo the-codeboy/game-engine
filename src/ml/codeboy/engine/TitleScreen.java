@@ -15,6 +15,7 @@ public class TitleScreen extends Game {
 
     public TitleScreen(String name, UITheme theme) {
         super(name, theme);
+        setMaxFPS(30);
     }
 
     @Override
