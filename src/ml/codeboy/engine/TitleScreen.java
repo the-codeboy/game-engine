@@ -19,11 +19,6 @@ public class TitleScreen extends Game {
     }
 
     @Override
-    protected GameVariables initVariables() {
-        return GameVariables.loadFromFile("titleScreen.save");
-    }
-
-    @Override
     protected void initialise() {
         group = new ButtonGroup(getWidth() / 2, (int) (getHeight() * 0.7), getWidth() / 4, getHeight() / 2, group);
         addTitle();

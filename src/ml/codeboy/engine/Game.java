@@ -294,8 +294,6 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     }
 
     public GameVariables getVariables() {
-        if (variables == null)
-            variables = initVariables();
         return variables;
     }
 
@@ -314,8 +312,6 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         camera = new Camera(this);
         camera.setLayer(Layer.INVISIBLE);
         variables = initVariables();
-        if (variables == null)
-            throw new IllegalStateException("GameVariables can not be null");
         initialised = false;
         initialise();
         if (!initialised) {
@@ -383,10 +379,12 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
             layer = layer.getNext();
         }
 //        GameObject.getGameObjects().forEach(g->g.onDestruction(new DestroyEvent(g)));
-        for (GameObject gameObject : GameObject.getGameObjects()) {
+        if(getVariables()!=null){
+            for (GameObject gameObject : GameObject.getGameObjects()) {
                 getVariables().saveVariables(gameObject);
+            }
+            getVariables().save();
         }
-        getVariables().save();
         GameObject.getGameObjects().clear();
         exitAction.run();
         if (closeGame) {
@@ -412,7 +410,9 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
         exit();
     }
 
-    abstract protected GameVariables initVariables();
+    protected GameVariables initVariables(){
+        return null;
+    }
 
     /**
      * Will get called when the Game is initialised right before the gameLoop gets started (before the first game tick)

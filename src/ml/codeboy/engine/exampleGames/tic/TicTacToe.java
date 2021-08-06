@@ -18,11 +18,6 @@ public class TicTacToe extends Game {
     }
 
     @Override
-    protected GameVariables initVariables() {
-        return GameVariables.loadFromFile("./TicTacToe.save");
-    }
-
-    @Override
     protected void initialise() {
         field = new Field();
         Button button = new Button("restart", this::restartGame);

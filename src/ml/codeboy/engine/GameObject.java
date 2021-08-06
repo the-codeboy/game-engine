@@ -74,7 +74,9 @@ public class GameObject extends Sprite {
 
         Game.get().getScheduler().scheduleTask(() -> {
             gameObjects.add(this);
-            game.getVariables().loadVariables(this);
+            if(game.getVariables()!=null){
+                game.getVariables().loadVariables(this);
+            }
         }, 0);
 
         //registerListeners();
