@@ -17,6 +17,17 @@ public class Sound {
 
     private AudioFormat format;
 
+    public static Sound play(String path){
+        try {
+            Sound sound=new Sound(path,AudioSystem.getClip());
+            sound.play();
+            return sound;
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public Sound(Sound sound) {
         this(sound.path, sound.clip, sound.runAfter);
     }
