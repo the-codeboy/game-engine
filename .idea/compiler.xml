@@ -13,7 +13,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="game-engine" target="8" />
+      <module name="game-engine" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
