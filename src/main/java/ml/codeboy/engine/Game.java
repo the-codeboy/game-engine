@@ -1,6 +1,5 @@
 package ml.codeboy.engine;
 
-import com.sun.istack.internal.Nullable;
 import ml.codeboy.engine.Saving.GameVariables;
 import ml.codeboy.engine.UI.UITheme;
 
@@ -122,7 +121,6 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     /**
      * @return the current Game singleton
      */
-    @Nullable
     public static Game get() {
         return instance;
     }
@@ -159,7 +157,6 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
     /**
      * @return the time since the last frame
      */
-    @Nullable
     public static double deltaTime() {
         return deltaTime(false);
     }
@@ -266,7 +263,6 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
      * @return the JFrame this Game is rendering to
      * might be removed in a future release but is still safe to use at the moment
      */
-    @Nullable
     public JFrame getFrame() {
         return frame;
     }
