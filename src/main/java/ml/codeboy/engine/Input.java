@@ -6,13 +6,15 @@ import ml.codeboy.engine.exampleGames.shooter.Shooter;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Input implements MouseListener, KeyListener, MouseWheelListener, MouseMotionListener {
 
     public static boolean debugMode = false;
     private static Input input;
-    private final HashMap<Integer, Boolean> keys = new HashMap<>();
+    private final Set<Integer> keys = new HashSet<>();
+    private Set<Integer> lastTickKeys=new HashSet<>();
     private boolean mouseDown = false;
 
     public static Input getInstance() {
@@ -31,8 +33,23 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
         return position == null ? new Point() : position;
     }
 
+    void tick(){
+        lastTickKeys=new HashSet<>(keys);
+    }
+
+    /**
+     * @param keyCode the KeyCode of the key
+     * @return whether the key was just pressed this tick and wasn´t pressed before
+     */
+    public static boolean isKeyPressed(int keyCode) {
+        return getInstance().keys.contains(keyCode)&&!getInstance().lastTickKeys.contains(keyCode);
+    }
+    /**
+     * @param keyCode the KeyCode of the key
+     * @return whether the key is currently down
+     */
     public static boolean isKeyDown(int keyCode) {
-        return getInstance().keys.getOrDefault(keyCode, false);
+        return getInstance().keys.contains(keyCode);
     }
 
     public static int getMouseX() {
@@ -121,14 +138,14 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
             if (Shooter.get() != null)
                 Shooter.get().getPlayer().addCoins(1000);
         }
-        keys.put(e.getKeyCode(), true);
+        keys.add(e.getKeyCode());
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE)
             Game.get().doNextTick(Game.get()::togglePause);
-        keys.put(e.getKeyCode(), false);
+        keys.remove(e.getKeyCode());
         if (e.getKeyCode() == KeyEvent.VK_F3) {
             debugMode = !debugMode;
             System.out.println("debug mode " + (debugMode ? "enabled" : "disabled"));

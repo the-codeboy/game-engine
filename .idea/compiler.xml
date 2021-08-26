@@ -4,5 +4,16 @@
     <wildcardResourcePatterns>
       <entry name="!?*.java !?*.form !?*.class !?*.groovy !?*.scala !?*.flex !?*.kt !?*.clj !?*.aj" />
     </wildcardResourcePatterns>
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="game-engine" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="game-engine" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

@@ -82,6 +82,11 @@ public class Player extends Damageable {
         player = null;
     }
 
+    @Override
+    public void destroy() {
+        super.destroy();
+    }
+
     public int getAmmo() {
         return (int) ammo;
     }

@@ -501,6 +501,7 @@ public abstract class Game implements KeyListener, MouseListener, MouseMotionLis
             average_internalTick += internalTick;
             average_fullTick += fullTick;
             try {
+                Input.getInstance().tick();
                 tickStartTime = System.currentTimeMillis();
                 executeGameLogic();
                 gameLogic = System.currentTimeMillis() - tickStartTime;

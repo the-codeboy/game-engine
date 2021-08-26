@@ -38,7 +38,7 @@ public class Sprite implements Comparable<Sprite> {
     private double x, y;
     private SpriteType type = SpriteType.Image;
     private boolean isDestroyed = false;
-    private boolean hasChanged = false;
+    protected boolean hasChanged = false;
     private double rotation = 0;
     private Animation animation;
 
@@ -238,10 +238,20 @@ public class Sprite implements Comparable<Sprite> {
     }
 
     /**
+     * @return the width of this Sprite on the screen
+     */
+    public int getWidthOnScreen() {
+        if(getLayer()==Layer.UI)
+            return getWidth();
+        return game.getCamera().getWidthOnScreen(this);
+    }
+
+    /**
      * @param width the new width for this Sprite
      */
     public void setWidth(int width) {
         this.width = width;
+        setChanged();
     }
 
     /**
@@ -250,12 +260,21 @@ public class Sprite implements Comparable<Sprite> {
     public int getHeight() {
         return height;
     }
+    /**
+     * @return the height of this Sprite on the screen
+     */
+    public int getHeightOnScreen() {
+        if(getLayer()==Layer.UI)
+            return getHeight();
+        return game.getCamera().getHeightOnScreen(this);
+    }
 
     /**
      * @param height the new height for this Sprite
      */
     public void setHeight(int height) {
         this.height = height;
+        setChanged();
     }
 
     /**
@@ -264,8 +283,8 @@ public class Sprite implements Comparable<Sprite> {
      * @return the Sprite instance - for chaining
      */
     public Sprite setWidthAndHeight(int width, int height) {
-        this.height = height;
-        this.width = width;
+        setWidth(width);
+        setHeight(height);
         return this;
     }
 
@@ -285,8 +304,7 @@ public class Sprite implements Comparable<Sprite> {
      * @see Sprite#setWidthAndHeight(int, int)
      */
     public void setSize(int size) {
-        this.height = size;
-        this.width = size;
+        setWidthAndHeight(size,size);
     }
 
     /**
@@ -425,8 +443,8 @@ public class Sprite implements Comparable<Sprite> {
      * @param position the new position of this Sprite as a Point object
      */
     public void setPosition(Vector position) {
-        setX(position.getX());
-        setY(position.getY());
+        setX(position.x);
+        setY(position.y);
     }
 
     /**
@@ -511,11 +529,14 @@ public class Sprite implements Comparable<Sprite> {
      * @param g the Graphics2D object to render to
      */
     public void render(Graphics2D g) {
+        int width=getWidthOnScreen(),
+                height=getHeightOnScreen(),
+                x=getXOnScreen() - width / 2,
+                y=getYOnScreen() - height / 2;
         if (Input.debugMode) {
             g.setColor(Color.RED);
-            g.drawRect(getXOnScreen() - getWidth() / 2, getYOnScreen() - getHeight() / 2, getWidth(), getHeight());
+            g.drawRect(x, y, width, height);
         }
-        //if(getLayer()==Layer.UI||isOnScreen())
 
         switch (type) {
             case Image: {
@@ -525,19 +546,19 @@ public class Sprite implements Comparable<Sprite> {
                 }
                 if (image == null)
                     return;
-                renderImage(g);
+                renderImage(g,x,y,width,height);
                 break;
             }
             case Circle: {
                 g.setColor(color);
                 if (width > 0 && height > 0)
-                    g.drawOval(getXOnScreen() - getWidth() / 2, getYOnScreen() - getHeight() / 2, getWidth(), getHeight());
+                    g.drawOval(x, y, width, height);
                 break;
             }
             case Rectangle: {
                 g.setColor(color);
                 if (width > 0 && height > 0)
-                    g.drawRect(getXOnScreen() - getWidth() / 2, getYOnScreen() - getHeight() / 2, getWidth(), getHeight());
+                    g.drawRect(x, y, width, height);
                 break;
             }
             case Custom: {
@@ -548,7 +569,7 @@ public class Sprite implements Comparable<Sprite> {
         hasChanged = false;
     }
 
-    private void renderImage(Graphics2D g) {
+    private void renderImage(Graphics2D g,int x,int y,int width,int height) {
         BufferedImage image = getImage();
         if (image == null)
             return;
@@ -559,9 +580,9 @@ public class Sprite implements Comparable<Sprite> {
             image = op.filter(image, null);
         }
         if (width != -1 && height != -1)
-            g.drawImage(image, getXOnScreen() - getWidth() / 2, getYOnScreen() - getHeight() / 2, width, height, null);
+            g.drawImage(image, x, y, width, height, null);
         else
-            g.drawImage(image, getXOnScreen() - getWidth() / 2, getYOnScreen() - getHeight() / 2, null);
+            g.drawImage(image, x, y, null);
     }
 
     /**
