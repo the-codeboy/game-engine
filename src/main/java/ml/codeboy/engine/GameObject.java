@@ -16,7 +16,7 @@ public class GameObject extends Sprite {
     protected double deltaTime = 0;
     private boolean initialised = false;
     private Vector target = null, startingPos;
-    private double timeLeft = 0;
+    private double timeLeft = 0,totalTime=0;
     private double nextPhysicsUpdate = Math.random(), physicsUpdateEvery = 0;
     private boolean isPhysicsTick = false;
     private boolean hasCollision = true;
@@ -114,6 +114,7 @@ public class GameObject extends Sprite {
         target = point;
         startingPos = getPosition();
         this.timeLeft = when;
+        this.totalTime = when;
     }
 
     void internalTick() {
@@ -123,8 +124,8 @@ public class GameObject extends Sprite {
             if (timeLeft <= 0) {
                 setPosition(target);
             } else {
-                addX((target.x - startingPos.x) * deltaTime / (timeLeft + deltaTime));
-                addY((target.y - startingPos.y) * deltaTime / (timeLeft + deltaTime));
+                setX(startingPos.x+((target.x -startingPos.x) * (totalTime-timeLeft) / totalTime));
+                setY(startingPos.y+((target.y -startingPos.y) * (totalTime-timeLeft) / totalTime));
             }
         }
         if (isListeningForCollision() && (isPhysicsTick = (nextPhysicsUpdate -= deltaTime) < 0)) {
