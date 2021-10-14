@@ -20,7 +20,7 @@ public class UIObject extends Sprite {
     protected List<String> lines = new ArrayList<>();
     UITheme theme = UITheme.DEFAULT;
     float borderpercentage = 0.95f;
-    private List<UIConstraint> constraints = new ArrayList<>();
+    private final List<UIConstraint> constraints = new ArrayList<>();
     private boolean animated = false;
     private String text = "";
     private double size = 1;
@@ -47,6 +47,16 @@ public class UIObject extends Sprite {
         this.constraints.addAll(Arrays.asList(constraints));
         recalculate();
         return this;
+    }
+
+    /**
+     * This will override all existin UIConstraints for this UIObject
+     * @param constraints the new UIConstraints
+     * @return this for chaining
+     */
+    public UIObject setConstraints(UIConstraint... constraints) {
+        this.constraints.clear();
+        return addConstraints(constraints);
     }
 
     @Override
